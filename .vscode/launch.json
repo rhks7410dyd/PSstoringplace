@@ -5,6 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "java",
+            "name": "App",
+            "request": "launch",
+            "mainClass": "App",
+            "projectName": "PSstoringplace_bf46524e"
+        },
+        {
             "name": "g++ - 활성 파일 빌드 및 디버그",
             "type": "cppdbg",
             "request": "launch",
