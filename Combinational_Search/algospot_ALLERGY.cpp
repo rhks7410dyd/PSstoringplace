@@ -18,7 +18,7 @@ vector<int> food_info[50];
 vector<int> pep_info[50];
 int can_eat_food[50];
 
-int solve(int idx);
+int solve(int idx,int now);
 void clear_vector();
 
 int main(){
@@ -52,7 +52,18 @@ int main(){
             }
         }
         
-        ans = solve(0);
+        int max = 0;
+        for(int i = 0 ; i < m ; i++){
+            if(max < food_info[i][0]){
+                max = food_info[i][0];
+            }
+        }
+
+        for(int i = 0 ; i < m ; i++){
+            if(food_info[i][0] == max){
+                ans = min(ans,solve(0,i));
+            }
+        }
 
         clear_vector();
         memset(can_eat_food,0,sizeof(can_eat_food));
@@ -62,29 +73,42 @@ int main(){
     return 0;
 }
 
-int solve(int idx){
-    int ret;
+int solve(int idx,int now){
+    int ret=INF;
 
-    int best_food = 0,t = 0;
+
+    for(int i = 1 ; i < food_info[now].size() ; i++){
+        int next = food_info[now][i];
+        can_eat_food[next]++;
+        for(size_t j = 0 ; j < pep_info[next].size() ; j++){
+            food_info[pep_info[next][j]][0]--;
+        }
+    }
+
+    int max = 0;
     for(int i = 0 ; i < m ; i++){
-        if(food_info[i][0] > t){
-            best_food = i;
-            t = food_info[i][0];
+        if(max < food_info[i][0]){
+            max = food_info[i][0];
         }
     }
 
-    if(t <= 0)  return 0;
-
-    for(size_t i = 1 ; i < food_info[best_food].size() ; i++){
-        int now = food_info[best_food][i];
-        can_eat_food[now]++;
-        for(size_t j = 0 ; j < pep_info[now].size() ; j++){
-            food_info[pep_info[now][j]][0]--;
+    if(max == 0)  return 0;
+    
+    for(int i = 0 ; i < m ; i++){
+        if(max == food_info[i][0]){
+            ret = min(ret,solve(idx+1,i)+1);
         }
     }
 
-    ret = solve(idx+1)+1;
+    for(size_t i = 1 ; i < food_info[now].size() ; i++){
+        int next = food_info[now][i];
+        can_eat_food[next]++;
+        for(size_t j = 0 ; j < pep_info[next].size() ; j++){
+            food_info[pep_info[next][j]][0]--;
+        }
+    }
 
+    if(ret == INF)   ret = 0;
     return ret;
 }
 
@@ -114,5 +138,64 @@ a b c d e f g h i j
 5 b c f h i
 4 b e g j
 5 b c g h i
+output) 2   1
 
+2
+10 7
+a b c d e f g h i j
+6 a c d h i j
+3 a d i
+7 a c f g h i j
+3 b d g
+5 b c f h i
+4 b e g j
+5 b c g h i
+4 6
+cl bom dara minzy
+2 dara minzy
+2 cl minzy
+2 cl dara
+1 cl
+2 bom dara
+2 bom minzy
+
+output) 1   1
+
+4
+10 7
+a b c d e f g h i j
+6 a c d h i j
+3 a d i
+7 a c f g h i j
+3 b d g
+5 b c f h i
+4 b e g j
+5 b c g h i
+4 6
+cl bom dara minzy
+2 dara minzy
+2 cl minzy
+2 cl dara
+1 cl
+2 bom dara
+2 bom minzy
+10 7
+a b c d e f g h i j
+6 a c d h i j
+3 a d i
+7 a c f g h i j
+3 b d g
+5 b c f h i
+4 b e g j
+5 b c g h i
+4 6
+cl bom dara minzy
+2 dara minzy
+2 cl minzy
+2 cl dara
+1 cl
+2 bom dara
+2 bom minzy
+
+output) 1 1 0 0
 */
