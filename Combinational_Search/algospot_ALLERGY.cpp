@@ -20,6 +20,8 @@ int can_eat_food[50];
 
 int solve(int idx,int now);
 void clear_vector();
+void print_pep_info();
+void print_food_info();
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -43,11 +45,10 @@ int main(){
 
         for(int i = 0 ; i < m ; i++){
             cin >> t;
-            food_info[i].push_back(0);
+            food_info[i].push_back(t);
             for(int j = 0 ; j < t ; j++){
                 cin >> input;
                 food_info[i].push_back(m1[input]);
-                food_info[i][0]++;
                 pep_info[m1[input]].push_back(i);
             }
         }
@@ -58,7 +59,11 @@ int main(){
                 max = food_info[i][0];
             }
         }
-
+        /*
+        print_food_info();
+        cout << endl;
+        print_pep_info();
+        */
         for(int i = 0 ; i < m ; i++){
             if(food_info[i][0] == max){
                 ans = min(ans,solve(0,i));
@@ -75,12 +80,12 @@ int main(){
 
 int solve(int idx,int now){
     int ret=INF;
-
-
+    //기저 조건 분석을 더 해야되는듯
     for(int i = 1 ; i < food_info[now].size() ; i++){
         int next = food_info[now][i];
         can_eat_food[next]++;
         for(size_t j = 0 ; j < pep_info[next].size() ; j++){
+            if(pep_info[next][j]==now)  continue;
             food_info[pep_info[next][j]][0]--;
         }
     }
@@ -93,18 +98,23 @@ int solve(int idx,int now){
     }
 
     if(max == 0)  return 0;
-    
+
+    food_info[now][0] = 0;
+
     for(int i = 0 ; i < m ; i++){
         if(max == food_info[i][0]){
             ret = min(ret,solve(idx+1,i)+1);
         }
     }
 
+    food_info[now][0] = food_info[now].size() - 1;
+
     for(size_t i = 1 ; i < food_info[now].size() ; i++){
         int next = food_info[now][i];
-        can_eat_food[next]++;
+        can_eat_food[next]--;
         for(size_t j = 0 ; j < pep_info[next].size() ; j++){
-            food_info[pep_info[next][j]][0]--;
+            if(pep_info[next][j]==now)  continue;
+            food_info[pep_info[next][j]][0]++;
         }
     }
 
@@ -113,11 +123,33 @@ int solve(int idx,int now){
 }
 
 void clear_vector(){
+    for(int i = 0 ; i < n ; i++){
+        pep_info[i].clear();
+    }
     for(int i = 0 ; i < m ; i++){
         food_info[i].clear();
     }
 }
 
+void print_food_info(){
+    auto v = food_info;
+    for(int i = 0 ; i < m ; i++){
+        for(int j = 0 ; j < v[i].size() ; j++){
+            cout << v[i][j] << ' ';
+        }
+    cout << '\n';
+    }
+}
+
+void print_pep_info(){
+    auto v = pep_info;
+    for(int i = 0 ; i < n ; i++){
+        for(int j = 0 ; j < v[i].size() ; j++){
+            cout << v[i][j] << ' ';
+        }
+    cout << '\n';
+    }
+}
 
 /*
 2
