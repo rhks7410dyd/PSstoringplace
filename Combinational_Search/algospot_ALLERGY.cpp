@@ -18,108 +18,63 @@ vector<int> food_info[50];
 vector<int> pep_info[50];
 int can_eat_food[50];
 
-int solve(int idx,int now);
+int solve(int now);
 void clear_vector();
 void print_pep_info();
 void print_food_info();
 
 int main(){
-    cin.tie(NULL);	cout.tie(NULL);
+    cin.tie(NULL);
+    cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
     int C;
     cin >> C;
+
     while(C--){
-        //continue code. . .
-
         cin >> n >> m;
-
-        int t;
         string input;
-        ans = INF;
-
         for(int i = 0 ; i < n ; i++){
             cin >> input;
             m1[input] = i;
         }
 
+        int t,max=0;
         for(int i = 0 ; i < m ; i++){
             cin >> t;
+            max = min(max,t);
             food_info[i].push_back(t);
             for(int j = 0 ; j < t ; j++){
                 cin >> input;
                 food_info[i].push_back(m1[input]);
-                pep_info[m1[input]].push_back(i);
             }
         }
-        
-        int max = 0;
-        for(int i = 0 ; i < m ; i++){
-            if(max < food_info[i][0]){
-                max = food_info[i][0];
-            }
-        }
-        /*
-        print_food_info();
-        cout << endl;
-        print_pep_info();
-        */
+
+        ans = INF;
+
         for(int i = 0 ; i < m ; i++){
             if(food_info[i][0] == max){
-                ans = min(ans,solve(0,i));
+                ans = min(ans,solve(i));
             }
         }
 
-        clear_vector();
-        memset(can_eat_food,0,sizeof(can_eat_food));
-
         cout << ans << '\n';
+        clear_vector();
     }
+
     return 0;
 }
 
-int solve(int idx,int now){
-    int ret=INF;
-    //기저 조건 분석을 더 해야되는듯
-    for(int i = 1 ; i < food_info[now].size() ; i++){
-        int next = food_info[now][i];
-        can_eat_food[next]++;
-        for(size_t j = 0 ; j < pep_info[next].size() ; j++){
-            if(pep_info[next][j]==now)  continue;
-            food_info[pep_info[next][j]][0]--;
-        }
+int solve(int now){
+    for(int i = 0 ; i < n ; i++){
+        if(!can_eat_food[i])    break;
+        return 0;
+        //return 1?
     }
 
-    int max = 0;
-    for(int i = 0 ; i < m ; i++){
-        if(max < food_info[i][0]){
-            max = food_info[i][0];
-        }
-    }
+    int ret = INF;
 
-    if(max == 0)  return 0;
-
-    food_info[now][0] = 0;
-
-    for(int i = 0 ; i < m ; i++){
-        if(max == food_info[i][0]){
-            ret = min(ret,solve(idx+1,i)+1);
-        }
-    }
-
-    food_info[now][0] = food_info[now].size() - 1;
-
-    for(size_t i = 1 ; i < food_info[now].size() ; i++){
-        int next = food_info[now][i];
-        can_eat_food[next]--;
-        for(size_t j = 0 ; j < pep_info[next].size() ; j++){
-            if(pep_info[next][j]==now)  continue;
-            food_info[pep_info[next][j]][0]++;
-        }
-    }
-
-    if(ret == INF)   ret = 0;
-    return ret;
+    
 }
 
 void clear_vector(){
