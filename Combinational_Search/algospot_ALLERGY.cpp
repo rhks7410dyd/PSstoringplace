@@ -1,8 +1,3 @@
-/*
-기본적인 구현은 다 된 것 같음. 하지만 휴리스틱 구현을 해야됨.
-지금 구현한 것의 문제점은 동일한 사람을 채울 수 있을 때, 가장 앞쪽 인덱스만 선택할 수 있다는 점.
-이걸 같은 갯수면 무조건 다 할 수 있게 만들어야 할듯
-*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -39,10 +34,10 @@ int main(){
             m1[input] = i;
         }
 
-        int t,max=0;
+        int t,Max=0;
         for(int i = 0 ; i < m ; i++){
             cin >> t;
-            max = min(max,t);
+            Max = max(Max,t);
             food_info[i].push_back(t);
             for(int j = 0 ; j < t ; j++){
                 cin >> input;
@@ -53,7 +48,7 @@ int main(){
         ans = INF;
 
         for(int i = 0 ; i < m ; i++){
-            if(food_info[i][0] == max){
+            if(food_info[i][0] == Max){
                 ans = min(ans,solve(i));
             }
         }
@@ -72,9 +67,37 @@ int solve(int now){
         //return 1?
     }
 
-    int ret = INF;
+    int Max = -1,ret = INF;
 
-    
+    for(int i = 0 ; i < m ; i++){
+        if(Max < food_info[i][0])  Max = food_info[i][0];
+    }
+
+    for(int i = 0 ; i < m ; i++){
+        if(food_info[i][0] == Max){
+            for(int j = 1 ; j < food_info[i].size() ; j++){
+                int now_p = food_info[i][j];
+                can_eat_food[now_p]++;
+                for(int i = 0 ; i < pep_info[now_p].size() ; i++){
+                    food_info[pep_info[now_p][i]][0]--;
+                }
+            }
+            food_info[i][0] = 0;
+
+            ret = min(ret,solve(i)+1);
+
+            for(int j = 1 ; j < food_info[i].size() ; j++){
+                int now_p = food_info[i][j];
+                can_eat_food[now_p]--;
+                for(int i = 0 ; i < pep_info[now_p].size() ; i++){
+                    food_info[pep_info[now_p][i]][0]++;
+                }
+            }
+            food_info[i][0] = Max;
+        }
+    }
+
+    return ret;
 }
 
 void clear_vector(){
