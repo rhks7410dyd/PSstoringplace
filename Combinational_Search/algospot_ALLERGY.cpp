@@ -55,6 +55,7 @@ int main(){
 
         cout << ans << '\n';
         clear_vector();
+        memset(can_eat_food,0,sizeof(can_eat_food));
     }
 
     return 0;
@@ -63,39 +64,41 @@ int main(){
 int solve(int now){
     for(int i = 0 ; i < n ; i++){
         if(!can_eat_food[i])    break;
+
         return 0;
         //return 1?
     }
 
-    int Max = -1,ret = INF;
-
-    for(int i = 0 ; i < m ; i++){
-        if(Max < food_info[i][0])  Max = food_info[i][0];
-    }
-
-    for(int i = 0 ; i < m ; i++){
-        if(food_info[i][0] == Max){
-            for(int j = 1 ; j < food_info[i].size() ; j++){
-                int now_p = food_info[i][j];
-                can_eat_food[now_p]++;
-                for(int i = 0 ; i < pep_info[now_p].size() ; i++){
-                    food_info[pep_info[now_p][i]][0]--;
-                }
-            }
-            food_info[i][0] = 0;
-
-            ret = min(ret,solve(i)+1);
-
-            for(int j = 1 ; j < food_info[i].size() ; j++){
-                int now_p = food_info[i][j];
-                can_eat_food[now_p]--;
-                for(int i = 0 ; i < pep_info[now_p].size() ; i++){
-                    food_info[pep_info[now_p][i]][0]++;
-                }
-            }
-            food_info[i][0] = Max;
+    int now_t = food_info[now][0];
+    for(int i = 1 ; i <= food_info[now][0] ; i++){
+        int t = food_info[now][i];
+        can_eat_food[t]++;
+        for(size_t j = 0 ; j < pep_info[t].size() ; j++){
+            food_info[pep_info[t][j]][0]--;
         }
     }
+    food_info[now][0] = 0;
+
+    int ret = INF,Max = -1;
+
+    for(int i = 0 ; i < m ; i++){
+        if(Max < food_info[i][0])   Max = food_info[i][0];
+    }
+
+    for(int i = 0 ; i < m ; i++){
+        if(Max == food_info[i][0]){
+            ret = min(ret,solve(i)+1);
+        }
+    }
+
+    for(int i = 1 ; i <= food_info[now][0] ; i++){
+        int t = food_info[now][i];
+        can_eat_food[t]--;
+        for(size_t j = 0 ; j < pep_info[t].size() ; j++){
+            food_info[pep_info[t][j]][0]++;
+        }
+    }
+    food_info[now][0] = now_t;
 
     return ret;
 }
