@@ -1,3 +1,4 @@
+//문제 자체는 제대로 푼 건지 테케는 맞지만, 세그폴트가 뜬다
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -11,12 +12,10 @@ int n,m,ans;
 map <string,int> m1;
 vector<int> food_info[50];
 vector<int> pep_info[50];
-int can_eat_food[50];
+int valid_count[50];
 
 int solve(int now);
 void clear_vector();
-void print_pep_info();
-void print_food_info();
 
 int main(){
     cin.tie(NULL);
@@ -38,67 +37,64 @@ int main(){
         for(int i = 0 ; i < m ; i++){
             cin >> t;
             Max = max(Max,t);
-            food_info[i].push_back(t);
+            valid_count[i] = t;
             for(int j = 0 ; j < t ; j++){
                 cin >> input;
                 food_info[i].push_back(m1[input]);
+                pep_info[m1[input]].push_back(i);
             }
         }
 
         ans = INF;
 
         for(int i = 0 ; i < m ; i++){
-            if(food_info[i][0] == Max){
+            if(valid_count[i] == Max){
                 ans = min(ans,solve(i));
             }
         }
 
         cout << ans << '\n';
         clear_vector();
-        memset(can_eat_food,0,sizeof(can_eat_food));
+        memset(valid_count,0,sizeof(valid_count));
     }
 
     return 0;
 }
 
 int solve(int now){
-    for(int i = 0 ; i < n ; i++){
-        if(!can_eat_food[i])    break;
+    for(int i = 0 ; i < m ; i++){
+        if(valid_count[i])    break;
 
-        return 0;
+        return 1;
         //return 1?
     }
 
-    int now_t = food_info[now][0];
-    for(int i = 1 ; i <= food_info[now][0] ; i++){
+    int now_t = valid_count[now];
+    for(int i = 0 ; i < now_t ; i++){
         int t = food_info[now][i];
-        can_eat_food[t]++;
         for(size_t j = 0 ; j < pep_info[t].size() ; j++){
-            food_info[pep_info[t][j]][0]--;
+            valid_count[pep_info[t][j]]--;
         }
     }
-    food_info[now][0] = 0;
 
     int ret = INF,Max = -1;
 
     for(int i = 0 ; i < m ; i++){
-        if(Max < food_info[i][0])   Max = food_info[i][0];
+        if(Max < valid_count[i])   Max = valid_count[i];
     }
 
     for(int i = 0 ; i < m ; i++){
-        if(Max == food_info[i][0]){
+        if(Max == valid_count[i]){
             ret = min(ret,solve(i)+1);
         }
     }
 
-    for(int i = 1 ; i <= food_info[now][0] ; i++){
+    for(int i = 1 ; i < now_t ; i++){
         int t = food_info[now][i];
-        can_eat_food[t]--;
         for(size_t j = 0 ; j < pep_info[t].size() ; j++){
-            food_info[pep_info[t][j]][0]++;
+            valid_count[pep_info[t][j]]++;
         }
     }
-    food_info[now][0] = now_t;
 
     return ret;
 }
@@ -111,104 +107,3 @@ void clear_vector(){
         food_info[i].clear();
     }
 }
-
-void print_food_info(){
-    auto v = food_info;
-    for(int i = 0 ; i < m ; i++){
-        for(int j = 0 ; j < v[i].size() ; j++){
-            cout << v[i][j] << ' ';
-        }
-    cout << '\n';
-    }
-}
-
-void print_pep_info(){
-    auto v = pep_info;
-    for(int i = 0 ; i < n ; i++){
-        for(int j = 0 ; j < v[i].size() ; j++){
-            cout << v[i][j] << ' ';
-        }
-    cout << '\n';
-    }
-}
-
-/*
-2
-4 6
-cl bom dara minzy
-2 dara minzy
-2 cl minzy
-2 cl dara
-1 cl
-2 bom dara
-2 bom minzy
-10 7
-a b c d e f g h i j
-6 a c d h i j
-3 a d i
-7 a c f g h i j
-3 b d g
-5 b c f h i
-4 b e g j
-5 b c g h i
-output) 2   1
-
-2
-10 7
-a b c d e f g h i j
-6 a c d h i j
-3 a d i
-7 a c f g h i j
-3 b d g
-5 b c f h i
-4 b e g j
-5 b c g h i
-4 6
-cl bom dara minzy
-2 dara minzy
-2 cl minzy
-2 cl dara
-1 cl
-2 bom dara
-2 bom minzy
-
-output) 1   1
-
-4
-10 7
-a b c d e f g h i j
-6 a c d h i j
-3 a d i
-7 a c f g h i j
-3 b d g
-5 b c f h i
-4 b e g j
-5 b c g h i
-4 6
-cl bom dara minzy
-2 dara minzy
-2 cl minzy
-2 cl dara
-1 cl
-2 bom dara
-2 bom minzy
-10 7
-a b c d e f g h i j
-6 a c d h i j
-3 a d i
-7 a c f g h i j
-3 b d g
-5 b c f h i
-4 b e g j
-5 b c g h i
-4 6
-cl bom dara minzy
-2 dara minzy
-2 cl minzy
-2 cl dara
-1 cl
-2 bom dara
-2 bom minzy
-
-output) 1 1 0 0
-*/
