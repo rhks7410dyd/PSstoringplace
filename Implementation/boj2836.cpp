@@ -1,3 +1,4 @@
+//우선순위 큐에 넣을 comapare함수를 통해서 무조건적으로 가장 효율적인 애가 우선순위 큐의 탑에 오도록 구현할 수 있다면 편할 것
 #include <iostream>
 #include <vector>
 #include <queue>
@@ -7,10 +8,11 @@
 using namespace std;
 
 int N;
-long long M;
+long long M,now_pos=0;
 vector<pair<long long,long long>> route;
 priority_queue<long long,int> temp;
 
+bool compare(pair<long long,long long>& a,pair<long long,long long>& b);
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -28,8 +30,6 @@ int main(){
 
     sort(route.begin(),route.end());
 
-    int passenger_num = 0;
-    long long now_pos = 0;
     long long ans_dis = 0;
     temp.push({route[0].first,0});
 
@@ -37,14 +37,22 @@ int main(){
     가는 길에 픽업 되면 하기 + 내려주는 위치면 second를 -1로 푸쉬, 아니면 자기 인덱스 번호 저장
     그래서 세컨드가 음수가 아니면 그 인덱스 번호의 세컨드를 푸쉬, -1이면 푸쉬 X
     */
+   
     while(!temp.empty()){
-        auto nxt = temp.top().first;
+        auto now = temp.top();
         temp.pop();
-        ans_dis += abs(now_pos - nxt.first);
-        now_pos = nxt.first;
-        if(nxt.second >= 0)  temp.push({});
-        else    temp.push({});
+        
+
+        if(now.second >= 0){
+            temp.push({route[now.second].first,-1});
+        }
+
+        
     }
 
     return 0;
+}
+
+bool compare(pair<long long,long long>& a,pair<long long,long long>& b){
+    return abs(a.first-now_pos) > abs(b.first-now_pos);
 }
