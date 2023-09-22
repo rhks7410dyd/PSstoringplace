@@ -1,3 +1,4 @@
+//비트마스킹에 너무 안익숙함
 #include <iostream>
 #include <algorithm>
 #include <cstring>
@@ -9,11 +10,10 @@ using namespace std;
 int N,K,ans = INF;
 int dis[10][10];
 int adj[10][10];
-bool visit[10];
+int best[1<<10];
 
 void floyd_warshall();
-int huristic(int now);
-int backtracking(int now);
+int backtracking(int set,int now);
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -29,38 +29,26 @@ int main(){
 
     floyd_warshall();
 
-    visit[K] = true;
-    ans = huristic(K);
-    visit[K] = false;
+    fill(&best[0],&best[1<<10],INF);
+    backtracking(1<<K,K);
 
-    ans = min(ans,backtracking(K));
-
-    cout << ans << endl;
+    cout << best[1<<K] << endl;
 
     return 0;
 }
 
-int backtracking(int now){
-    -
-}
+int backtracking(int set,int now){
+    if(set == (1<<10)-1)    return 0;
 
-int huristic(int now){
-    int ret = 0,best_path=INF,next_node;
-
+    int ret = INF;
     for(int i = 0 ; i < N ; i++){
-        if(best_path > dis[now][i] && now != i && !visit[i]){
-            best_path = dis[now][i];
-            next_node = i;
-        }
+        if(set & (1<<i))  continue;
+        int next_set = set | (1<<i);
+        ret = min(ret,backtracking(next_set,i)+dis[now][i]);
     }
 
-    if(best_path == INF)    return 0;
-
-    visit[next_node] = true;
-    ret = dis[now][next_node] + huristic(next_node);
-    visit[next_node] = false;
-
-    return ret;
+    if(ret > best[set]) return INF;
+    return best[set] = ret;
 }
 
 void floyd_warshall(){
