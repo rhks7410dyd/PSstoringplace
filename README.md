@@ -22,10 +22,10 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 6. algorithm 헤더 upper_bound && lower_bound 함수 (https://chanhuiseok.github.io/posts/algo-55/)
 
 # 풀다가 못푼 문제
-Math - boj11812
 Implementation - boj2836
 Floyd_warshall - boj17182
 Greedy - boj2109
+Combinational_Search algospot_KAKURO2
 
 # Memo
 1. 토익 실전모의고사 문제집
