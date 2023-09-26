@@ -24,7 +24,6 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 # 풀다가 못푼 문제
 Implementation - boj2836
 Floyd_warshall - boj17182
-Greedy - boj2109
 Combinational_Search algospot_KAKURO2
 
 # Memo
