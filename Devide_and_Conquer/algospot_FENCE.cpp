@@ -1,9 +1,9 @@
 //스위핑 알고리즘을 사용하지 않은 방식을 만들기 위해서 작성
 //백준 6549 문제와 동일한 문제임.
-
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#define INF 987654321
 
 using namespace std;
 
@@ -54,21 +54,20 @@ int Recursive(int left,int right,vector<int>& h){
 	ret = max(ret,Recursive(mid+1,right,h));
 	
 	int l=mid,r=mid+1;
-	int height=min(h[l],h[r]);
-	ret = max(ret,height*2);
-	while(l > left || r < right){
-		//cout << "ln74 " << "l " << l << " r " << r << " return value " << ret << endl;
-		if(r < right && (l == left || h[l-1] < h[r+1])){
-			r++;
-			height = min(height,h[r]);
-		}
+	int height = INF;
+	while(l >= left && r <= right){
+		height = min(height,h[l]);
+		height = min(height,h[r]);
+		int tmp = height*(r-l+1);
+		ret = max(ret,tmp);
+		
+		if(r == right)	l--;
+		else if(l == left)	r++;
 		else{
-			l--;
-			height = min(height,h[l]);
+			if(h[l-1] > h[r+1])	l--;
+			else	r++;	
 		}
-		ret = max (ret,height*(r-l+1));
-	}	//<- 여길 어떻게 짤지가 핵심이니까 여기는 좀있다 구성해보고 짜기
-	
+	}
 	
 	return ret;
 }
