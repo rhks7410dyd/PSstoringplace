@@ -1,5 +1,7 @@
 #include <iostream>
 #define endl '\n'
+#define INF 987654321
+
 using namespace std;
 
 int main(){
@@ -7,7 +9,6 @@ int main(){
     ios_base::sync_with_stdio(false);
 
     //continue code. . .
-    cout << "hello world!" << endl;
 
     return 0;
 }

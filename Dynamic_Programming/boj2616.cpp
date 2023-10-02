@@ -16,8 +16,6 @@ int main(){
     cin.tie(NULL);	cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    //continue code. . .
-
     cin >> n;
     for(int i = 1 ; i <= n ; i++){
         cin >> pep_num[i];
@@ -28,21 +26,24 @@ int main(){
 
     memset(&dp[0][0],-1,sizeof(dp));
 
-    get_dp(small_num,2);
+    get_dp(1,3);
 
-    cout << dp[small_num][2] << endl;
+    cout << dp[1][2] << endl;
     return 0;
 }
-//왜 예제가 195가 나올까...
-int get_dp(int idx,int train_num){
-    if(idx > n)    return 0;
 
-    int& ret = dp[idx][train_num];
+int get_dp(int idx,int train_num){
+    if(n - idx + 1 < train_num * small_num)   return -1;
+
+    if(train_num == 0)  return 0;
+
+    int ret = dp[idx][train_num-1];
+
     if(ret != -1)   return ret;
-    if(train_num == 0)  return ret = 0;
-    
-    ret = max(ret,get_dp(idx+small_num,train_num-1)+pep_num[idx]-pep_num[idx-small_num]);
+
     ret = max(ret,get_dp(idx+1,train_num));
+    ret = max(ret,get_dp(idx+small_num,train_num-1)+(pep_num[idx+small_num-1]-pep_num[idx-1]));
+    //위의 줄 표현이 살짝 아쉽긴 함. 너무 가독성이 떨어짐
 
     return ret;
 }
