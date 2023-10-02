@@ -22,7 +22,6 @@ int main(){
     cin.tie(NULL);	cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    //continue code. . .
     Solve();
 
     return 0;
@@ -88,7 +87,6 @@ void set_section_5(int x,int y,int d1,int d2){
 void set_other_sectors(int x,int y,int d1,int d2){
     for(int i = 0 ; i < n ; i++){
         for(int j = 0 ; j < n ; j++){
-            //continue code...
             if(section[i][j] != -1) continue;
             if(i <= x+ d1 && j < y) section[i][j] = 1;
             else if(i >= x + d2 && j > y - d1 + d2) section[i][j] = 4;
@@ -112,7 +110,6 @@ int get_diff(){
     vector<int> v(5,0);
     for(int i = 0 ; i < n ; i++){
         for(int j = 0 ; j < n ; j++){
-            //continue code...
             v[section[i][j]-1] += map[i][j];
         }
     }
