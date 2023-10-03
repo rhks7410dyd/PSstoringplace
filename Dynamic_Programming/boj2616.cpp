@@ -37,7 +37,7 @@ int get_dp(int idx,int train_num){
 
     if(train_num == 0)  return 0;
 
-    int ret = dp[idx][train_num-1];
+    int& ret = dp[idx][train_num-1];
 
     if(ret != -1)   return ret;
 
