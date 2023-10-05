@@ -3,50 +3,60 @@
 */
 #include <iostream>
 #include <algorithm>
+#include <cstring>
 #define endl '\n'
 #define SIZE 101
 
 using namespace std;
 
+string a,b,c;
+int a_size,b_size,c_size;
+
 int dp[SIZE][SIZE][SIZE];
+
+void Solve();
+int get_ans(int i,int j,int k);
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
     ios_base::sync_with_stdio(false);
 
-    //continue code. . .
-
-    string a,b,c;
-
-    cin >> a >> b >> c;
-
-    int a_size = a.size();
-    int b_size = b.size();
-    int c_size = c.size();
-
-    for(int i = 1 ; i <= a_size ; i++){
-        for(int j = 1 ; j <= b_size ; j++){
-            for(int k = 1 ; k <= c_size ; k++){
-                if(a[i-1]==b[j-1]==c[k-1]){
-                    dp[i][j][k] == dp[i-1][j-1][k-1];
-                }
-                else{
-                    dp[i][j][k] = max(dp[i][j][k],dp[i-1][j-1][k-1]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i-1][j-1][k]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i-1][j][k-1]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i][j-1][k-1]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i-1][j][k]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i][j-1][k]);
-                    dp[i][j][k] = max(dp[i][j][k],dp[i][j][k-1]);   
-                }
-            }
-        }
-    }
-
-    cout << dp[a_size][b_size][c_size] << endl;
+    Solve();
 
     return 0;
 }
+
+void Solve(){
+    cin >> a >> b >> c;
+
+    a_size = a.size();
+    b_size = b.size();
+    c_size = c.size();
+
+    memset(dp,-1,sizeof(dp));
+
+    int ans = get_ans(0,0,0);
+
+    cout << ans << endl;
+}
+
+int get_ans(int i,int j,int k){
+    int& ret = dp[i][j][k];
+    if(ret != -1)   return ret;
+    //
+    if(i == a_size || j == b_size || k == c_size)   return 0;
+
+    if(a[i] == b[j] && b[j] == c[k]){
+        ret = max(ret,get_ans(i+1,j+1,k+1)+1);
+    }
+
+    ret = max(ret,get_ans(i+1,j,k));
+    ret = max(ret,get_ans(i,j+1,k));
+    ret = max(ret,get_ans(i,j,k+1));
+
+    return ret;
+}
+
 
 /*
 #include <iostream>
