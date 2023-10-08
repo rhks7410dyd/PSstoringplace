@@ -118,3 +118,8 @@ https://ooolabs.tistory.com/211
 
 qoa 마가리타(중고로?)
 faudio 스케일
+
+iFi Audio UNO USB DAC 헤드폰 앰프 (DSD MQA PCM 지원)
+
+Simgot DEW0 고음질 휴대용 꼬다리 DAC & 앰프
+

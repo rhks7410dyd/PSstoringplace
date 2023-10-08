@@ -4,16 +4,24 @@
 
 using namespace std;
 
-bool not_self_num[10100];
+int x,y;
 
-int d(int a){
+int Rev(int n){
+    if(n == 1000)    return 1;
+    
     int ret = 0;
-
-    while(a){
-        ret += a%10;
-        a /= 10;        
+    if(n/100 > 0){
+        ret += n/100;
+        ret += ((n/10)%10)*10;
+        ret += (n%10)*100;
     }
-    ret += a;
+    else if(n/10 > 0){
+        ret += n/10;
+        ret += (n%10)*10;
+    }
+    else{
+        ret = n;
+    }
     
     return ret;
 }
@@ -23,14 +31,10 @@ int main(){
     ios_base::sync_with_stdio(false);
 
     //continue code. . .
-    for(int i = 1 ; i < 10001 ; i++){
-        not_self_num[d(i)] = true;
-    }
+    cin >> x >> y;
+    int ans = Rev(Rev(x)+Rev(y));
     
-    for(int i = 1 ; i < 10001 ; i++){
-        if(!not_self_num[i])    cout << i << '\n';
-    }
+    cout << ans << endl;
 
     return 0;
 }
-
