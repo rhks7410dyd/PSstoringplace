@@ -1,3 +1,9 @@
+/*
+.  .   .
+|  | _ | _. _ ._ _  _
+|/\|(/.|(_.(_)[ | )(/.
+*/
+
 #include <iostream>
 #define endl '\n'
 #define INF 987654321
@@ -9,6 +15,8 @@ int main(){
     ios_base::sync_with_stdio(false);
 
     //continue code. . .
-
+    cout << ".  .   ." << endl;
+    cout << "|  | _ | _. _ ._ _  _" << endl;
+    cout << "|/\\|(/.|(_.(_)[ | )(/.";
     return 0;
 }

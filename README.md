@@ -22,10 +22,29 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 6. algorithm 헤더 upper_bound && lower_bound 함수 (https://chanhuiseok.github.io/posts/algo-55/)
 
 # 풀다가 못푼 문제
-Implementation - boj2836
-Implementation - boj17779
-Floyd_warshall - boj17182
-Combinational_Search algospot_KAKURO2
+
+## 백준
+Implementation - boj2836  
+Implementation - boj17779  
+Floyd_warshall - boj17182  
+Devide_and_Conquer - boj15824
+  
+## 알고스팟
+### DP
+##### algospot_JLIS
+##### algospot_QUANTIZE
+##### algospot_PACKING
+##### algospot_OCR
+##### algospot_KLIS
+##### algospot_RESTORE
+##### algospot_NUMBERGAME
+##### algospot_GENIUS
+
+### GREEDY
+##### Greedy algospot_MINASTIRITH
+
+### Combinational Search
+##### Combinational_Search algospot_KAKURO2
 
 
 # Memo
@@ -80,11 +99,10 @@ O/S별
 1. 2022 카카오 신입 공채 1차 온라인 코딩테스트 - https://tech.kakao.com/2022/01/14/2022-kakao-recruitment-round-1/
 
 # 컴퓨터 견적
-본체 : 140 ~ 150(로아 144fps 풀옵 기준)
-모니터 : 30 (27인치 144~165fps)
-듀얼 모니터 암 : 10 (슬림형)
-의자 : 20 (매쉬 or 패브릭 소재)
-----------------------------------
+본체 : 140 ~ 150(로아 144fps 풀옵 기준)  
+모니터 : 30 (27인치 144~165fps)  
+듀얼 모니터 암 : 10 (슬림형)  
+의자 : 20 (매쉬 or 패브릭 소재)  
 200 ~ 210
 
 
@@ -98,26 +116,24 @@ O/S별
 단점 : 너무 단순함, 말그대로 웹 프로젝트만 하는 느낌이라 뭔가 잘 이뤄지지는 않을듯?
 
 
-### code server를 이용한 스프링 부트 공부 계획
+## code server를 이용한 스프링 부트 공부 계획
 1. 리눅스 서버 구축
 2. code server를 그 서버에 설치
 3. 공부
 
 -----
 
-서버 구축 방안
+## 서버 구축 방안
 - aws
 - 구글클라우드 플랫폼(무료를 이미 써버린듯)
 - 네이버 클라우드
 - 가비아 클라우드(정액제 있음)
 
+<br>
 
-### 이어폰
+## 이어폰
 23년 일본 vgp? 추천이어폰
 https://ooolabs.tistory.com/211
-
-qoa 마가리타(중고로?)
-faudio 스케일
 
 iFi Audio UNO USB DAC 헤드폰 앰프 (DSD MQA PCM 지원)
 
