@@ -1,9 +1,3 @@
-/*
-.  .   .
-|  | _ | _. _ ._ _  _
-|/\|(/.|(_.(_)[ | )(/.
-*/
-
 #include <iostream>
 #define endl '\n'
 #define INF 987654321
