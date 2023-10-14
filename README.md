@@ -28,7 +28,8 @@ Implementation - boj2836
 Implementation - boj17779  
 Floyd_warshall - boj17182  
 Devide_and_Conquer - boj15824
-  
+BFS - boj1726
+
 ## 알고스팟
 ### DP
 ##### algospot_JLIS
