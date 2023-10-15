@@ -67,25 +67,32 @@ void Solve(){
     for(int i = 1 ; i <= 4 ; i++){
         int ty = ey + dy[i];
         int tx = ex + dx[i];
-        if(ty < 0 || ty >= n || tx < 0 || tx >= m || min_val < map[ty][tx]) continue;
-        min_val = map[ty][tx];
-        min_d = i;
-    }
-    int last_dir;
-    if(min_d%2) last_dir = min_d+1;
-    else    last_dir = min_d-1; 
+        
+        if(ty < 0 || ty >= n || tx < 0 || tx >= m) continue;
 
-    if(last_dir == ed){
-        cout << map[ey][ex] << endl;
-    }
-    else if(last_dir/3 == ed/3){
-        cout << map[ey][ex] + 2;
-    }
-    else{
-        cout << map[ey][ex] + 1;
-    }
-    cout << endl;
+        if(map[ty][tx] > map[ey][ex])  continue;
 
+        bool out_range = false;
+        if(map[ey][ex] == map[ty][tx]){
+            for(int j = 0 ; j < 2 ; j++){
+                ty += dy[i];    tx += dx[i];
+                if(ty < 0 || ty >= n || tx < 0 || tx >= m){
+                    out_range = true;
+                    break;
+                }
+                
+                if(map[ty][tx] < map[ey][ex])   break;
+            }
+        }
+        
+        if(out_range)   continue;
+
+        if(i == ed) min_val = min(min_val,map[ey][ex] + 2);
+        else if(i/3 == ed/3)    min_val = min(min_val,map[ey][ex]);
+        else    min_val = min(min_val,map[ey][ex]+1);
+    }
+    
+    cout << min_val << endl;
     //print2Darray();
 }
 
@@ -142,19 +149,3 @@ void BFS(){
         }
     }
 }
-
-/*
-1.문제에서의 동서남북과 본인의 코드 동서남북 왼쪽 오른쪽 회전이 논리적으로 일치하는가?
-
-2. 현재 방향으로1,2,3칸을 갈 수있는데 만약 첫 번째칸은 0,두 번째 칸은 1, 세 번째 칸은 0 이라고 하면 첫 번째 칸 까지밖에 가지 못합니다.
-
-3.180회전할 때 명령어 2번이 잘 카운팅이 되는가?
-
-4.저는 목표점에 도착하고 return하는 방식으로 하지않고 목표방향과 일치하는지 검증 후 값을 갱신해주고 continue하는 식으로 했습니다.간간히 return 방식으로 하시는 분들이 계신데 (저도 코린이라 잘 모릅니다만)본인의 논리대로 도착시 바로 return한 값이 최소값이라는 보장이 있는지 다시 생각해 보세요.
-
-5.입력 행,열 은 1<=i,j<=row,col입니다.런타임에러 뜨시는 분들은 index 범위를 고려하였는지 확인해 보세요.
-
-6.저는 이 부분을 간과했었는데 현재 방향에서 시계방향으로 회전하도록 구현했었는데 이렇게 하면 문제가 있습니다
-
-예시로 남쪽을 바라보고 있는 상태에서 동쪽방향으로 회전하려면 회전1번이면 충분하지만 시계방향으로 회전시 3번 회전하게 됩니다.
-*/
