@@ -24,11 +24,21 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 # 풀다가 못푼 문제
 
 ## 백준
+Bactracking - boj1405
+Bactracking - boj1799
+BFS - boj1726
+BFS - boj11967
+BFS - boj9328
+Devide_and_Conquer - boj15824
+Devide_and_Conquer - boj12850
+Floyd_warshall - boj20056 
 Implementation - boj2836  
 Implementation - boj17779  
-Floyd_warshall - boj17182  
-Devide_and_Conquer - boj15824
-BFS - boj1726
+Implementation - boj19236
+Geometry - boj16937
+Greedy - boj1052
+Math - boj10422
+Topological_Sorting - boj1516
 
 ## 알고스팟
 ### DP
