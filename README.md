@@ -25,7 +25,6 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 
 ## 백준
 Bactracking - boj1405
-Bactracking - boj1799
 BFS - boj1726
 BFS - boj11967
 BFS - boj9328

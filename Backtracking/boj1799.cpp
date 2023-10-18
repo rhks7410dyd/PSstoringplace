@@ -3,22 +3,24 @@
 */
 #include <iostream>
 #include <algorithm>
+#include <cstdlib>
+#include <vector>
 #define endl '\n'
 #define INF 987654321
 #define SIZE 10
 
 using namespace std;
 
-int d[4][2] = {{1,1},{1,-1},{-1,1},{-1,-1}};
-int map[SIZE][SIZE];
+bool map[SIZE][SIZE];
 int n;
 int ans;
+vector<pair<int,int>> v;
 
-int recursive(int y,int x,int c);
-int huristic(int y,int x);
+int first_recursive(int y,int x);
+int second_recursive(int y,int x);
+bool can_put_bishop(int y,int x);
 void Solve();
 void Input();
-void put_bishop(int y,int x,int put_or_pick);
 
 int main(){
 	cin.tie(NULL);	cout.tie(NULL);
@@ -33,8 +35,8 @@ int main(){
 void Solve(){
 	Input();
 
-	huristic(0,0);
-	recursive(0,0,0);
+	ans = first_recursive(0,0);
+	if(n != 1)	ans += second_recursive(0,1);
 
 	cout << ans << endl;
 	return;
@@ -49,75 +51,76 @@ void Input(){
 	}
 }
 
-int recursive(int y,int x,int c){
-	int ret = -INF,nx,ny;
-	if(y == n)	return 0;
-
-	//여기서 다 ny,nx를 같은 색 칸으로만 되게 하면 문제를 풀기 쉬워?짐
-	//남은 1인 칸 갯수 + 현재까지 비숍 갯수 <= 현재의 최댓값
-	int one_c = 0;
-	for(int i = y*n + x ; i < n*n ; i++){
-		if(map[i/n][i%n] == 1)	one_c++;
-	}
-	if(one_c + c <= ans)	return -INF;
-
-	if(x == n-1){
-		nx = 0;	ny = y+1;
-	}
-	else{
-		nx = x + 1; ny = y;
+int first_recursive(int y,int x){
+	if(y == n-1 && (x==n-1 || x==n-2)){
+		if(map[y][x] && can_put_bishop(y,x))	return 1;
+		else	return 0;
 	}
 
-	if(map[y][x] == 1){
-		map[y][x] = 0;
-		put_bishop(y,x,-1);
-		ret = max(ret,recursive(ny,nx,c+1)+1);
-		map[y][x] = 1;
-		put_bishop(y,x,1);
-	}
-
-	ret = max(ret,recursive(ny,nx,c));
-
-	ans = max(ans,ret);
-
-	return ret;
-}
-
-void put_bishop(int y,int x,int put_or_pick){
-	for(int i = 0 ; i < 4 ; i++){
-		int ny = y + d[i][0],nx = x + d[i][1];
-
-		while(ny >= 0 && ny < n && nx >= 0 && nx < n){
-			map[ny][nx] += put_or_pick;
-			ny += d[i][0];
-			nx += d[i][1];
+	int ny,nx;
+	if(x == n-1 || x == n-2){
+		ny = y+1;
+		if(ny%2){
+			nx = 1;
 		}
-	}
-}
-
-int huristic(int y,int x){
-	int ret = -INF,nx,ny;
-	if(y == n)	return 0;
-
-	if(x == n-1){
-		nx = 0;	ny = y+1;
+		else	nx = 0;
 	}
 	else{
-		nx = x + 1; ny = y;
+		ny = y;	nx = x+2;
 	}
 
-	if(map[y][x] == 1){
-		map[y][x] = 0;
-		put_bishop(y,x,-1);
-		ret = max(ret,huristic(ny,nx)+1);
-		map[y][x] = 1;
-		put_bishop(y,x,1);
-	}
-	else	ret = max(ret,huristic(ny,nx));
+	int ret = -INF;
 
-	ans = max(ans,ret);	
+	if(map[y][x] && can_put_bishop(y,x)){
+		v.push_back({y,x});
+		int pos = v.size()-1;
+		ret = max(ret,first_recursive(ny,nx)+1);
+		v.erase(v.begin() + pos);
+	}
+
+	ret = max(ret,first_recursive(ny,nx));
 
 	return ret;
+}
+
+int second_recursive(int y,int x){
+	if(y == n-1 && (x==n-1 || x==n-2)){
+		if(map[y][x] && can_put_bishop(y,x))	return 1;
+		else	return 0;
+	}
+
+	int ny,nx;
+	if(x == n-1 || x == n-2){
+		ny = y+1;
+		if(ny%2){
+			nx = 0;
+		}
+		else	nx = 1;
+	}
+	else{
+		ny = y;	nx = x+2;
+	}
+
+
+	int ret = -INF;
+
+	if(map[y][x] && can_put_bishop(y,x)){
+		v.push_back({y,x});
+		int pos = v.size()-1;
+		ret = max(ret,second_recursive(ny,nx)+1);
+		v.erase(v.begin() + pos);
+	}
+
+	ret = max(ret,second_recursive(ny,nx));
+
+	return ret;
+}
+
+bool can_put_bishop(int y,int x){
+	for(int i = 0 ; i < v.size() ; i++){
+		if(abs(v[i].first-y) == abs(v[i].second - x))	return false;
+	}
+	return true;
 }
 
 /*
