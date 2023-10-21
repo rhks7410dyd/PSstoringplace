@@ -41,7 +41,6 @@ Topological_Sorting - boj1516
 
 ## 알고스팟
 ### DP
-##### algospot_JLIS
 ##### algospot_QUANTIZE
 ##### algospot_PACKING
 ##### algospot_OCR
@@ -149,3 +148,5 @@ iFi Audio UNO USB DAC 헤드폰 앰프 (DSD MQA PCM 지원)
 
 Simgot DEW0 고음질 휴대용 꼬다리 DAC & 앰프
 
+꼬다리 dac는 다른 이어폰 구매를 고려할 때 사면 될듯.
+퀸텟은 저항이 높지 않아서 사실 큰 의미가 없기도 하고, 집에서 사용할 dac정도만 생각하기 or 허브 + 꼬다리 dac로 사용하는 것도 낫배드
