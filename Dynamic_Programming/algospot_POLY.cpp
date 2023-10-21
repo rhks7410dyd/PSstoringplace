@@ -2,52 +2,61 @@
 #include <iostream>
 #include <cstring>
 #include <cstdlib>
+#define ll long long
+#define endl '\n'
 #define mod 10000000
+#define SIZE 100 + 1
 
 using namespace std;
 
-int dp[101][101];
-int recursive(int n,int b_c);
+ll dp[SIZE][SIZE];
+
+void Solve();
+ll poly(int num,int b_b);
 
 int main(){
-	cin.tie(NULL);
-	cout.tie(NULL);
+	cin.tie(NULL);	cout.tie(NULL);
 	ios_base::sync_with_stdio(false);
-	
-	int C;
-	cin >> C;
-	for(int c = 0 ; c < C ; c++){
-		int N;
-		cin >> N;
-		memset(dp,-1,sizeof(dp));
-		int ans = 0;
-		for(int i = 1 ; i <= N ; i++){
-			ans += recursive(N-i,i);
-			ans %= mod;
-		}
-		
-		cout << ans << '\n';
+
+	int c;
+	cin >> c;
+	for(int i = 0 ; i < c ; i++){
+		Solve();
 	}
-	
+
 	return 0;
 }
 
-int recursive(int n,int b_c){
-	if(dp[n][b_c] != -1)	return dp[n][b_c];
-	if(n==0){
-		dp[n][b_c] = 1;
-		return dp[n][b_c];
-	}	
-	if(n==1){
-		dp[n][b_c] = b_c;
-		return dp[n][b_c];
-	}
+void Solve(){
+	int n;
+	cin >> n;
 	
-	int ret = 0;
-	for(int i = 1 ; i <= n ; i++){
-		ret += ((b_c+i-1) * recursive(n-i,i));
+	memset(dp,-1,sizeof(dp));
+
+	ll ans = poly(n,0);
+
+	cout << ans << endl;
+
+	return ;
+}
+
+ll poly(int num,int b_b){
+	ll& ret = dp[num][b_b];
+
+	if(ret != -1)	return ret;
+
+	if(num == 0)	return ret = 1;
+	
+	if(num == 1)	return ret = b_b;
+
+	ret = 0;
+	for(int i = 1 ; i <= num ; i++){
+		int time_num = b_b + i - 1;
+		if(b_b == 0)	time_num = 1;
+		ret += time_num * poly(num-i,i);
 		ret %= mod;
 	}
-	dp[n][b_c] = ret;
-	return dp[n][b_c];
+
+
+	return ret;
 }
