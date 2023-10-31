@@ -41,7 +41,6 @@ Topological_Sorting - boj1516
 
 ## 알고스팟
 ### DP
-##### algospot_QUANTIZE
 ##### algospot_PACKING
 ##### algospot_OCR
 ##### algospot_KLIS

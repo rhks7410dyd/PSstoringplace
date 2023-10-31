@@ -1,102 +1,105 @@
-//범위 같은데서 졸려서 그런지 좀 잔실수가 많이 나왔음. 다시 읽어보면서 이런것만 좀 고치면 맞을듯
 //틀렸음. 사실 틀린 것도 중요하지만 코드를 확인해보니 수식을 전개해서 문제를 단순화함
 //2차방정식의 최솟값을 응용해서 오차가 최소가 되게 하는 값을 계산을 통해 구할 수 있음
 #include <iostream>
-#include <vector>
 #include <algorithm>
-#include <cstring>
+#include <vector>
 #include <cmath>
-#define SIZE 100 + 1
-#define INF 1000001000
+#include <cstring>
+#define endl '\n'
+#define SIZE 101
+#define INF 987654321
 
 using namespace std;
 
-int n,s;
+int N,S;
 int dp[SIZE][SIZE];
-int big_dp[10][SIZE];
-vector<int> arr;
+int DP[11][SIZE];
+int subsum[SIZE];
+vector<int> v;
 
 void Solve();
 void Input();
-int rec(int S,int index);	//bqn == before quntsize number
-int get_val(int s,int e,int q_num);
+int get_quant_num(int s,int e);
+int rec(int s,int idx);
 
 int main(){
 	cin.tie(NULL);	cout.tie(NULL);
 	ios_base::sync_with_stdio(false);
 
-	int C;
-	cin >> C;
-	for(int i = 0 ; i < C ; i++){
+	int c;
+	cin >> c;
+	for(int i = 0 ; i < c ; i++){
 		Solve();
 	}
-
+	
 	return 0;
 }
 
 void Solve(){
-	arr.clear(); 
-	fill(&dp[0][0],&dp[SIZE-1][SIZE],INF);
-	fill(&big_dp[0][0],&big_dp[9][SIZE],INF);
-	
+	memset(&dp[0][0],-1,sizeof(dp));
+	memset(&DP[0][0],-1,sizeof(DP));
+
 	Input();
 
-	sort(arr.begin(),arr.end());
-
 	int ans;
-	if(s >= n) ans = 0;
-	else	ans = rec(s,0);
+	if(S >= N)	ans = 0;
+	else	ans = rec(S,0);
 
 	cout << ans << endl;
-
 }
 
 void Input(){
-	cin >> n >> s;
-	
-	int t;
-	for(int i = 0 ; i < n ; i++){
-		cin >> t;
-		arr.push_back(t);
+	cin >> N >> S;
+
+	v.resize(N,0);
+
+	for(int i = 0 ; i < N ; i++){
+		cin >> v[i];
+	}
+
+	sort(v.begin(),v.begin()+N);
+
+	subsum[0] = 0;
+	for(int i = 1 ; i <= N ; i++){
+		subsum[i] = subsum[i-1] + v[i-1];
 	}
 }
 
-int rec(int S,int index){//남은 양자수 S개,index부터
-	int& ret = big_dp[S][index];
+int rec(int s,int idx){
+	int& ret = DP[s][idx];
+	if(ret != -1)	return ret;
 
-	if(index == n)	return 0;
-	if(ret != INF)	return ret;
+	if(N - idx <= s)	return ret = 0;
 
-	if(S == 1){
-		int& t_min = dp[index][n];//[index,n)
-		
-		if(t_min == INF){
-			for(int q = arr[index] ; q <= arr[n-1] ; q++){
-				t_min = min(t_min,get_val(index,n,q));
-			}
-		}
-		return ret = t_min;
+	if(s == 0){
+		if(idx != N)	return INF;
+		else	return 0;
 	}
 
-	for(int i = index + 1 ; i <= n ; i++){
-		int& t_min = dp[index][i];
-		
-		if(t_min == INF){
-			for(int q = arr[index] ; q <= arr[i-1] ; q++){
-				t_min = min(t_min,get_val(index,i,q));
-			}
-		}
+	if(idx == N){
+		return 0;
+	}
 
-		ret = min(ret,rec(S-1,i)+t_min);
+	ret = INF;
+	for(int i = idx+1 ; i <= N ; i++){
+		int q_num = get_quant_num(idx,i);
+		ret = min(ret,q_num + rec(s-1,i));
 	}
 
 	return ret;
 }
 
-int get_val(int s,int e,int q_num){
-	int ret = 0,t;
+int get_quant_num(int s,int e){
+	int& ret = dp[s][e];
+	if(ret != -1)	return ret;
+	if(e-s == 1)	return ret = 0;
+
+	int best_quantize_num = round((subsum[e]-subsum[s])/(double)(e-s));
+
+	int t;
+	ret = 0;
 	for(int i = s ; i < e ; i++){
-		t = arr[i] - q_num;
+		t = (double)v[i] - best_quantize_num;
 		ret += t*t;
 	}
 
