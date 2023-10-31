@@ -1,20 +1,27 @@
+/*
+마지막에 찾는 과정만 못함
+*/
 #include <iostream>
 #include <string>
+#include <cstring>
 #include <vector>
-#include <map>
 #include <algorithm>
 #define endl '\n'
 #define SIZE 100 + 1
+#define INF 987654321
 
 using namespace std;
 
 int n,w;
 int dp[SIZE][1001];
-map<string,int> m;
+vector<string> ans_list;
+vector<string> name_list;
 vector<pair<int,int>> v;
 
 void Solve();
 void Input();
+void get_ans_list(int cap,int idx);
+int rec(int cap,int idx);
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -32,7 +39,29 @@ int main(){
 void Solve(){
     Input();
 
-    //``
+    memset(&dp[0][0],-1,sizeof(dp));
+    ans_list.clear();
+    name_list.clear();
+    v.clear();
+
+    int ans = rec(w,0);
+    
+    // dp[w][i] == dp[w][i+1] 스킵 했다는 의미
+    // dp[w][i] != dp[w][i+1] 얘를 선택했을 때 최적화된 수라는 의미
+
+    get_ans_list(w,0);
+
+    cout << ans << ' ' << ans_list.size() << endl;
+    for(int i = 0 ; i < ans_list.size() ; i++){
+        cout << ans_list[i] << endl;
+    }
+
+    for(int i = 0 ; i < n ; i++){
+        for(int j = 0 ; j <=  w ; j++){
+            cout << dp[i][j] << '\t';
+        }
+        cout << endl;
+    }
 }
 
 void Input(){
@@ -41,7 +70,36 @@ void Input(){
     int a,b;
     for(int i = 0 ; i < n ; i++){
         cin >> name >> a >> b;
-        m[name] = i;
+        name_list.push_back(name);
         v.push_back({a,b});
+    }
+}
+
+int rec(int cap,int idx){
+    int& ret = dp[idx][cap];
+    if(ret != -1)   return ret;
+
+    if(idx == n)    return ret = 0;
+
+    auto now = v[idx];
+    if(now.first > cap) ret = rec(cap,idx+1);
+    else    ret = max(rec(cap,idx+1),now.second + rec(cap-now.first,idx+1));
+
+    return ret;
+}
+
+void get_ans_list(int cap,int idx){
+    if(idx != n-1){
+        if(dp[cap][idx] == dp[cap][idx+1])  get_ans_list(cap,idx+1);
+        else{
+            ans_list.push_back(name_list[idx]);
+            get_ans_list(cap-v[idx].first,idx+1);
+        }
+    }
+    else if(cap == 0){
+        return ;
+    }
+    else if(dp[cap][idx]){
+        ans_list.push_back(name_list[idx]);
     }
 }
