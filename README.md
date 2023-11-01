@@ -28,6 +28,8 @@ Bactracking - boj1405
 BFS - boj1726
 BFS - boj11967
 BFS - boj9328
+Dynamic_Programming - boj4781
+Dynamic_Programming - boj2629
 Devide_and_Conquer - boj15824
 Devide_and_Conquer - boj12850
 Floyd_warshall - boj20056 
@@ -41,7 +43,6 @@ Topological_Sorting - boj1516
 
 ## 알고스팟
 ### DP
-##### algospot_PACKING
 ##### algospot_OCR
 ##### algospot_KLIS
 ##### algospot_RESTORE
