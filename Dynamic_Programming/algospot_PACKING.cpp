@@ -37,12 +37,12 @@ int main(){
 }
 
 void Solve(){
-    Input();
-
     memset(&dp[0][0],-1,sizeof(dp));
     ans_list.clear();
     name_list.clear();
     v.clear();
+
+    Input();
 
     int ans = rec(w,0);
     
@@ -56,12 +56,13 @@ void Solve(){
         cout << ans_list[i] << endl;
     }
 
-    for(int i = 0 ; i < n ; i++){
-        for(int j = 0 ; j <=  w ; j++){
-            cout << dp[i][j] << '\t';
+    /*
+    for(int i = 0 ; i <= w ; i++){
+        for(int j = 0 ; j <  n ; j++){
+            cout << dp[j][i] << '\t';
         }
         cout << endl;
-    }
+    }*/
 }
 
 void Input(){
@@ -89,17 +90,16 @@ int rec(int cap,int idx){
 }
 
 void get_ans_list(int cap,int idx){
-    if(idx != n-1){
-        if(dp[cap][idx] == dp[cap][idx+1])  get_ans_list(cap,idx+1);
+    if(idx == n-1){
+        if(cap >= v[idx].first) ans_list.push_back(name_list[idx]);
+    }
+    else{
+        if(dp[idx][cap] == dp[idx+1][cap]){
+            get_ans_list(cap,idx+1);
+        }
         else{
             ans_list.push_back(name_list[idx]);
             get_ans_list(cap-v[idx].first,idx+1);
         }
-    }
-    else if(cap == 0){
-        return ;
-    }
-    else if(dp[cap][idx]){
-        ans_list.push_back(name_list[idx]);
     }
 }
