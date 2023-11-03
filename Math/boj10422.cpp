@@ -1,4 +1,3 @@
-//왜 dp를 섞었더니 모든 값이 1이 되는지 이해가 안됨
 #include <iostream>
 #include <cstring>
 #define mod 1000000007
@@ -38,21 +37,30 @@ int main(){
 }
 
 long long rec(int n,int c){
-    long long ret = dp[n][c];
-    if(ret != -1)   return dp[n][c];
+    long long& ret = dp[n][c];
+    if(ret != -1)   return ret;
 
-    if(n == 0 || n == c){
-        return dp[n][c] = 1;
+    if(n == c){
+        return ret = 1;
     }
-
+    
     if(c == 0){
-        return dp[n][c] = rec(n-1,1);
+        return ret = rec(n-1,1);
     }
+
+    ret = 0;
 
     ret += rec(n-1,c+1);
     ret %= mod;
     ret += rec(n-1,c-1);
     ret %= mod;
 
-    return dp[n][c] = ret;
+    return ret;
 }
+
+/*
+()()()
+(())()
+()(())
+((()))
+*/

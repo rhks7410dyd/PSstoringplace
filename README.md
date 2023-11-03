@@ -24,7 +24,6 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 # 풀다가 못푼 문제
 
 ## 백준
-Bactracking - boj1405
 BFS - boj1726
 BFS - boj11967
 BFS - boj9328
@@ -33,17 +32,16 @@ Dynamic_Programming - boj2629
 Devide_and_Conquer - boj15824
 Devide_and_Conquer - boj12850
 Floyd_warshall - boj20056 
-Implementation - boj2836  
-Implementation - boj17779  
+Implementation - boj2836
+Implementation - boj17779
 Implementation - boj19236
 Geometry - boj16937
 Greedy - boj1052
-Math - boj10422
 Topological_Sorting - boj1516
 
 ## 알고스팟
 ### DP
-##### algospot_OCR
+##### algospot_OCR <- 얘는 진짜 뭐하자는 건지 모르겠어서 나중에 풀기
 ##### algospot_KLIS
 ##### algospot_RESTORE
 ##### algospot_NUMBERGAME
