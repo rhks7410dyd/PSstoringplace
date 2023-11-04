@@ -1,18 +1,3 @@
-//
-/*]
-지금 방향을 따로 저장하지 않고, 상하좌우의 맵에 저장된 최단수행 횟수 값을 역추적해서 지금의 방향을 알아차리는 식으로 구현을 해놨지만,
-상하좌우 한 칸씩만 고려하게 된다면 아래와 같은 경우에 오류가 발생한다.
-
-? ? ? 4 ? ? ?
-0 0 0 6 0 0 0
-5 5 6 6 6 7 7
-
-0이 이동할 수 없는 칸이라 하고, 마지막에 (3,4)에 위치해야된다고 가정하자.
-그러면 1,4 와 3,2 에서 출발하는 두 값은 3,4에 위치하는데는 동일한 시간이 걸리지만, 만약 마지막 방향이 1이어야한다면
-전자의 경우에는 7번의 시행을 거쳐야하지만, 후자의 경우에는 6번에 걸쳐 끝난다.
-즉, 방향에 대한 고려를 하지 않은 최단거리 계산에서 오류가 났다고 볼 수 있다.
-*/
-
 #include <iostream>
 #include <queue>
 #include <algorithm>
@@ -22,24 +7,42 @@
 
 using namespace std;
 
-int sx,sy,sd,ex,ey,ed,n,m;
+struct info{
+    int y,x,d,val;
+};
+typedef struct info info;
+
+bool operator<(const info& a,const info& b){
+    if(a.val != b.val)  return a.val > b.val;
+    if(a.y != b.y)    return a.y < b.y;
+    if(a.x != b.x)  return a.x < b.x;
+    return a.d < b.d;
+}
+
+
 bool wall[100][100];
-int map[100][100];
-int dx[5] = {0,1,-1,0,0};
-int dy[5] = {0,0,0,1,-1};
+int sx,sy,sd,ex,ey,ed,n,m;
+int map[100][100][4];
+int dx[4] = {1,-1,0,0};
+int dy[4] = {0,0,1,-1};
 
 void Solve();
 void Input();
 void BFS();
-void print2Darray(){
-    for(int i = 0 ; i < n ; i++){
-        for(int j = 0 ; j < m ; j++){
-            if(map[i][j] != INF)    cout << map[i][j] << ' ';
-            else    cout << -1 << ' ';
+void printarray(){
+    cout <<"==============================================\n";
+    for(int i = 0 ; i < 4; i++){
+        cout << "dir : " << i << endl;
+        for(int j = 0 ; j < n ; j++){
+            for(int k = 0 ; k < m ; k++){
+                cout << map[j][k][i] << ' ';
+            }
+            cout << endl;
         }
         cout << endl;
     }
 }
+
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -53,50 +56,23 @@ int main(){
 void Solve(){
     Input();
 
+    //시작점 ==
     if(sx == ex && sy == ey){
         if(sd == ed)    cout << 0 << endl;
-        else if(sd/3 == ed/3)   cout << 2 << endl;
+        else if(sd/2 == ed/2)   cout << 2 << endl;
         else    cout << 1 << endl;
         return;
     }    
 
-    fill(&map[0][0],&map[99][100],INF);
-    BFS();
-
-    int min_d,min_val=INF;
-    for(int i = 1 ; i <= 4 ; i++){
-        int ty = ey + dy[i];
-        int tx = ex + dx[i];
-        
-        if(ty < 0 || ty >= n || tx < 0 || tx >= m) continue;
-
-        if(map[ty][tx] > map[ey][ex])  continue;
-
-        bool out_range = false;
-        if(map[ey][ex] == map[ty][tx]){
-            for(int j = 0 ; j < 2 ; j++){
-                ty += dy[i];    tx += dx[i];
-                if(ty < 0 || ty >= n || tx < 0 || tx >= m){
-                    out_range = true;
-                    break;
-                }
-                
-                if(map[ty][tx] < map[ey][ex])   break;
-            }
-        }
-        
-        if(out_range)   continue;
-
-        if(i == ed) min_val = min(min_val,map[ey][ex] + 2);
-        else if(i/3 == ed/3)    min_val = min(min_val,map[ey][ex]);
-        else    min_val = min(min_val,map[ey][ex]+1);
-    }
+    fill(&map[0][0][0],&map[99][99][4],INF);
     
-    cout << min_val << endl;
-    //print2Darray();
+    BFS();
+    
+    cout << map[ey][ex][ed] << endl;
+    //printarray();
 }
 
-void Input(){
+void Input(){// 0에 맞춰서 시작점과 도착점의 인덱스 조정
     cin >> n >> m;
 
     int t;
@@ -109,43 +85,45 @@ void Input(){
     }
     cin >> sy >> sx >> sd;
     cin >> ey >> ex >> ed;
-    sy--;   sx--;
-    ey--;   ex--;
+    sy--;   sx--;   sd--;
+    ey--;   ex--;   ed--;
 }
 
 void BFS(){
-    queue<pair<pair<int,int>,int>> q;
+    priority_queue<info> pq;
+    pq.push({sy,sx,sd,0});
+    map[sy][sx][sd] = 0;
 
-    q.push({{sy,sx},sd});
-    map[sy][sx] = 0;
-    while(!q.empty()){
-        auto now = q.front();
-        q.pop();
+    while(!pq.empty()){
+        auto now = pq.top();
+        pq.pop();
+
+        for(int i = 1 ; i <= 3 ; i++){
+            int ny = now.y + dy[now.d]*i;
+            int nx = now.x + dx[now.d]*i;
+            
+            if(ny < 0 || nx < 0 || ny >= n || nx >= m)  continue;
+            
+            int& next_pos = map[ny][nx][now.d];
+            if(next_pos != INF) continue;
+            if(wall[ny][nx])    break;
+            
+            next_pos = now.val + 1;
+            pq.push({ny,nx,now.d,now.val + 1});
+        }
+
 
         for(int i = 0 ; i < 4 ; i++){
-            for(int k = 1 ; k < 4 ; k++){
-                int next_d = (now.second+i)%4+1;
-                int next_y = now.first.first + dy[next_d]*k;
-                int next_x = now.first.second + dx[next_d]*k;
+            int& next_pos = map[now.y][now.x][i];
+            if(now.d != i && next_pos == INF){
+                int next_val = now.val;
+                if(now.d/2 == i/2)  next_val += 2;
+                else    next_val += 1;
 
-                if(next_y < 0 || next_y >= n || next_x < 0 || next_x >= m || wall[next_y][next_x])  break;
-
-                int next_val;
-                if(now.second == next_d){
-                    next_val = map[now.first.first][now.first.second] + 1;
-                }
-                else if(now.second/3 == next_d/3){
-                    next_val = map[now.first.first][now.first.second] + 3;
-                }
-                else{
-                    next_val = map[now.first.first][now.first.second] + 2;
-                }
-
-                if(map[next_y][next_x] > next_val){
-                    map[next_y][next_x] = next_val;
-                    q.push({{next_y,next_x},next_d});
-                }
+                next_pos = next_val;
+                pq.push({now.y,now.x,i,next_val});
             }
         }
+        
     }
 }
