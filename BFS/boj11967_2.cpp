@@ -16,6 +16,7 @@ struct Info{
 vector<Info> Switch[SIZE][SIZE];
 bool light_on[SIZE][SIZE];
 bool push_switch[SIZE][SIZE];
+bool can_move[SIZE][SIZE];
 void Solve();
 void Input();
 void pushing(int y,int x);
