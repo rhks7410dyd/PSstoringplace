@@ -14,6 +14,7 @@ struct Info{
     int x,y;
 };
 vector<Info> Switch[SIZE][SIZE];
+queue<pair<int,int>> q;
 bool light_on[SIZE][SIZE];
 bool push_switch[SIZE][SIZE];
 bool can_move[SIZE][SIZE];
@@ -59,15 +60,23 @@ void BFS(){
     light_on[1][1];
     pushing(1,1);
 
-    queue<pair<int,int>> q;
     q.push({1,1});
+
+    //매번 탐색을 해야되나 굳이??
+    //불을 킬 때, 1,1과 이어진 친구와 근접해있으면 추가되는 형식으로 하면 될듯
+    //while의 조건을 q.empty()로 설정하고, 각 반복의 마지막의 q.empty() == true인 경우 반복문을 사용해서 불이 켜진 방 중에서 인접한 방을 추가로 찾아내는 방식을 사용하면 우선적으로 한 번 거르고, 이후에 한 번에 최대한 여러개를 푸시할 수 있게 됨.
 }
 
 void pushing(int y,int x){
     for (int i=0; i< Switch[y][x].size(); i++)
     {
       auto now = Switch[y][x][i];
-      light_on[now.y][now.x] = true;
+      if(!light_on[now.y][now.x]){
+        light_on[now.y][now.x] = true;
+        if(can_move(now.y,now.x)){
+            q.push({now.y,now.x});
+        }
+      }
     }
 
     push_switch[y][x] = true;
