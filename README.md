@@ -24,7 +24,6 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 # 풀다가 못푼 문제
 
 ## 백준
-BFS - boj11967_2
 BFS - boj9328
 Dynamic_Programming - boj4781
 Dynamic_Programming - boj2629
