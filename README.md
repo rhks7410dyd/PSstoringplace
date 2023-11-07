@@ -34,7 +34,6 @@ Implementation - boj2836
 Implementation - boj17779
 Implementation - boj19236
 Geometry - boj16937
-Greedy - boj1052
 Topological_Sorting - boj1516
 
 ## 알고스팟
