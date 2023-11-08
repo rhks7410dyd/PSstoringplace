@@ -8,6 +8,8 @@ using namespace std;
 const int SIZE = 100;
 
 int h,w,ans = 0;
+int dx[4] = {1,-1,0,0};
+int dy[4] = {0,0,1,-1};
 char map[SIZE][SIZE];
 bool get_key[26];
 bool visit[SIZE][SIZE];
@@ -40,6 +42,37 @@ void Solve(){
 	*/
 	Input();
 
+	BFS();
+
+	cout << ans << endl;
+}
+
+void Input(){
+	cin >> h >> w;
+
+	int n = h,m = w;
+	for(int i = 0 ; i < n ; i++){
+		for(int j = 0 ; j < m ; j++){
+			cin >> map[i][j];
+		}
+	}
+
+	string key;
+	cin >> key;
+	if(key[0] != '0'){
+		for(int i = 0 ; i < key.size() ; i++){
+			get_key[key[i]-'a'] = true;
+		}
+	}
+}
+
+bool can_open(int y,int x){
+	char Key = map[y][x] - 'A' + 'a';
+	return get_key[Key];
+}
+
+void BFS(){
+	//최근에 푼 BFS 처럼 와일 문 마지막에 다 비어있으면 못 연 문 중에 열 수 있는 곳을 추가하는 방식으로 구현하기
 	queue<pair<int,int>> q;
 
 	for(int i = 0 ; i < h ; i++){
@@ -110,36 +143,38 @@ void Solve(){
 		}
 	}
 
-	BFS();
+	while(!q.empty()){
+		auto now = q.front();
+		q.pop();
 
-	cout << ans << endl;
-}
+		for(int i = 0 ; i < 4 ; i++){
+			int ny = now.first + dy[i];
+			int nx = now.second + dx[i];
 
-void Input(){
-	cin >> h >> w;
+			if(ny < 0 || ny >= h || nx < 0 || nx >= w || visit[ny][nx])	continue;
 
-	int n = h,m = w;
-	for(int i = 0 ; i < n ; i++){
-		for(int j = 0 ; j < m ; j++){
-			cin >> map[i][j];
+			if(map[ny][nx] == '.'){
+				q.push({ny,nx});
+				visit[ny][nx] =true;
+			}
+			else if(map[ny][nx] >= 'a'){//소문자 경우
+				q.push({ny,nx});
+				visit[ny][nx] =true;
+				get_key[map[ny][nx]-'a'] = true;
+			}
+			else if(map[ny][nx] >= 'A'){//대문자의 경우
+				if(!can_open(ny,nx))	continue;
+
+				q.push({ny,nx});
+				visit[ny][nx] =true;
+				ans++;
+			}
 		}
-	}
 
-	string key;
-	cin >> key;
-	if(key[0] != '0'){
-		for(int i = 0 ; i < key.size() ; i++){
-			get_key[key[i]-'a'] = true;
+		if(q.empty()){
+			for(int i = 0 ; i < block_pos.size() ; i++){
+				//continue code...
+			}
 		}
-	}
-}
-
-bool can_open(int y,int x){
-	char Key = map[y][x] - 'A' + 'a';
-	return get_key[Key];
-}
-
-void BFS(){
-	//최근에 푼 BFS 처럼 와일 문 마지막에 다 비어있으면 못 연 문 중에 열 수 있는 곳을 추가하는 방식으로 구현하기
-	
+	}	
 }
