@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <cstring>
 #define endl '\n'
 
 using namespace std;
@@ -48,6 +49,11 @@ void Solve(){
 }
 
 void Input(){
+	memset(get_key,0,sizeof(get_key));
+	memset(&visit[0][0],0,sizeof(visit));
+	ans = 0;
+	block_pos.clear();
+	
 	cin >> h >> w;
 
 	int n = h,m = w;
@@ -67,9 +73,10 @@ void Input(){
 }
 
 bool can_open(int y,int x){
-	char Key = map[y][x] - 'A' + 'a';
+	char Key = map[y][x] - 'A';
 	return get_key[Key];
 }
+
 
 void BFS(){
 	//최근에 푼 BFS 처럼 와일 문 마지막에 다 비어있으면 못 연 문 중에 열 수 있는 곳을 추가하는 방식으로 구현하기
@@ -91,6 +98,11 @@ void BFS(){
 			q.push({i,0});
 			visit[i][0] =true;
 		}
+		else if(map[i][0]== '$'){
+			ans++;
+			visit[i][0] = true;
+			q.push({i,0});
+		}
 
 		if(map[i][w-1] == '.'){
 			q.push({i,w-1});
@@ -106,6 +118,11 @@ void BFS(){
 			
 			q.push({i,w-1});
 			visit[i][w-1] =true;
+		}
+		else if(map[i][w-1]== '$'){
+			ans++;
+			visit[i][w-1] = true;
+			q.push({0,i});
 		}
 	}
 
@@ -125,6 +142,11 @@ void BFS(){
 			q.push({0,i});
 			visit[0][i] =true;
 		}
+		else if(map[0][i]== '$'){
+			ans++;
+			visit[0][i] = true;
+			q.push({0,i});
+		}
 
 		if(map[h-1][i] == '.'){
 			q.push({h-1,i});
@@ -140,6 +162,11 @@ void BFS(){
 			
 			q.push({h-1,i});
 			visit[h-1][i] =true;
+		}
+		else if(map[h-1][i]== '$'){
+			ans++;
+			visit[h-1][i] = true;
+			q.push({h-1,i});
 		}
 	}
 
@@ -163,18 +190,52 @@ void BFS(){
 				get_key[map[ny][nx]-'a'] = true;
 			}
 			else if(map[ny][nx] >= 'A'){//대문자의 경우
-				if(!can_open(ny,nx))	continue;
+				if(!can_open(ny,nx)){
+					block_pos.push_back({ny,nx});
+					continue;
+				}
 
 				q.push({ny,nx});
-				visit[ny][nx] =true;
+				visit[ny][nx] = true;
+			}
+			else if(map[ny][nx]== '$'){
 				ans++;
+				visit[ny][nx] = true;
+				q.push({ny,nx});
 			}
 		}
 
 		if(q.empty()){
 			for(int i = 0 ; i < block_pos.size() ; i++){
-				//continue code...
+				auto now = block_pos[i];
+				if(get_key[map[now.first][now.second]-'A'] && !visit[now.first][now.second]){
+					q.push({now.first,now.second});
+					visit[now.first][now.second] = true;
+				}
 			}
 		}
 	}	
 }
+/*반례
+1
+15 15
+**$*.**********
+****.*******$**
+****B.$****b.**
+$*****c*****.**
+*C$.*****fD..**
+*$*xd******.**$
+$.C********A.**
+**h********.AA.
+***************
+***.i**********
+***.***.K$*****
+*k.$$I.$*******
+******.$..j***$
+*******D*******
+****$**F*******
+za
+ans : 12
+출력 : 10
+아래 두 개가 카운팅이 안됨
+*/
