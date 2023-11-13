@@ -1,7 +1,148 @@
 /*
-왜..안되는 걸까......
-내일은 책 보고 제대로 비교해보기
+가장 헷갈리는건 정말 집합만 맞으면 최적화된 값을 뽑는건가?임 아무리 생각해봐도 순서에 따라 다르다는 생각이 든다.
 */
+#include <iostream>
+#include <vector>
+#include <cstring>
+#include <algorithm>
+#include <string>
+#define endl '\n'
+
+using namespace std;
+
+const int INF = 987654321;
+
+void Solve();
+void Input();
+int get_ans(int set,int idx);
+int get_minus_length(int a,int b);
+bool is_included(string& a,string& b);
+
+int N,s_size;
+int dp[1<<15];
+int best_select[1<<15][15];
+int overlap_length[15][15];
+
+vector<string> input_list;
+vector<string> sub_string;
+
+int main(){
+	cin.tie(NULL);	cout.tie(NULL);
+	ios_base::sync_with_stdio(false);
+
+	int C;
+	cin >> C;
+	while(C--){
+		Solve();
+	}
+	return 0;
+}
+
+void Solve(){
+	memset(&dp[0],-1,sizeof(dp));
+	memset(&best_select[0][0],-1,sizeof(best_select));
+	sub_string.clear();
+	input_list.clear();
+
+	Input();
+
+	//input_list에서 완전히 포함되는 부분배열들을 삭제하는 과정이 필요함.
+	sort(input_list.begin(), input_list.end(),[](string a,string b) { return a.size() < b.size(); });
+
+	bool is_overlapped[15];
+	for(int i = 0 ; i < N ; i++){
+		is_overlapped[i]=false;
+		for(int j = i+1 ; j < N ; j++){
+			if(input_list[j].find(input_list[i]) != string::npos){
+				is_overlapped[i] = true;
+				break;
+			}
+		}
+	}
+
+	for(int i = 0 ; i < N ; i++){
+		if(!is_overlapped[i])	sub_string.push_back(input_list[i]);
+	}
+
+	s_size = sub_string.size();
+
+	int ans = get_ans(0,0);
+
+	cout << ans << endl;
+	
+}
+
+void Input(){
+	cin >> N;
+
+	string temp;
+	for(int i = 0 ; i < N ; i++){
+		cin >> temp;
+		input_list.push_back(temp);
+	}
+}
+
+//이번 인덱스 값 + get_ans - 다음 예정 인덱스와 겹치는 값
+int get_ans(int set,int idx){
+	int& ret = dp[set];
+	if(ret != -1)	return ret;
+
+	if(set == (1<<s_size)-1)	return sub_string[idx].size();
+
+	ret = INF;
+	if(set == 0){//가장 처음인 경우
+		for(int i = 0 ; i < s_size ; i++){
+			int temp = get_ans(set | (1<<i),i);
+			if (temp < ret){
+				ret = temp;
+				best_select[set][idx] = i;
+			}
+		}
+		return ret;
+	}
+
+	for(int i = 0 ; i < s_size ; i++){
+		if(set & (1<<i))	continue;
+		int next_set = set | (1<<i);
+		int temp = sub_string[idx].size() + get_ans(next_set,i) - get_minus_length(idx,i);
+		if(temp < ret){
+			ret = temp;
+			best_select[set][idx] = i;
+		}
+	}
+
+	return ret;
+}
+
+int get_minus_length(int a,int b){
+	int& ret = overlap_length[a][b];
+	if(ret != -1)	return ret;
+	
+	string& f = sub_string[a];
+	string& e = sub_string[b];
+	int fsize = f.size();
+	int Size = f.size() < e.size() ? f.size() : e.size();
+	
+	ret = 0;
+	for(int l = 1 ; l < Size; l++){
+		bool can_overlap = true;
+		for(int i = 0 ; i < l ; i++){
+			if(f[fsize-l+i] != e[i]){
+				can_overlap = false;
+				break;
+			}
+		}
+		if(can_overlap)	ret = l;
+	}
+	//cout << f << ' ' << e << ' ' << ret << '\n';
+	return ret;
+}
+
+//최솟값을 찾는 과정을 생각해봐야됨.
+//하나의 집합에서 16가지 경우의 수 중에서 최적화 된 선택한 인덱스를 택할 것
+
+
+/*
 #include <iostream>
 #include <vector>
 #include <string>
@@ -60,12 +201,6 @@ int main(){
 			}
 		}
 		
-		/*
-		cout << "input list\n";
-		for(int i = 0 ; i < input.size() ; i++){
-			cout << input[i] << '\n';
-		}
-		*/
 		
 		int ans = INF;
 		
@@ -151,15 +286,11 @@ string reconstruct(int last,int Set){
 	for(int next = 0 ; next < input.size() ; next++){
 		if(Set & (1<<next))	continue;
 		int ifUsed = Solve(Set+(1<<next),next) + input[last].size() - get_minus_length(last,next);
-		/*
-		cout << "Set " << Set << " last " << last << " next " << next << '\n'
-			<< "Solve(Set+(1<<next),next) " << Solve(Set+(1<<next),next) << "  input[last].size() " <<  input[last].size()
-			<< " overlap_length[last][next] " << overlap_length[last][next] << '\n';
-		cout << "ifUsed " << ifUsed << " Solve(Set,last) " << Solve(Set,last) << '\n';
-		*/
+
 		if(Solve(Set,last) == ifUsed){
 			return (input[next].substr(overlap_length[last][next]) + reconstruct(next, Set + (1<<next)));
 		}
 	}
 	return "***** WARNING! *****";
 }
+*/
