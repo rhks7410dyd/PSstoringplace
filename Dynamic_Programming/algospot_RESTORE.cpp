@@ -1,5 +1,5 @@
 /*
-가장 헷갈리는건 정말 집합만 맞으면 최적화된 값을 뽑는건가?임 아무리 생각해봐도 순서에 따라 다르다는 생각이 든다.
+비트연산에 뭔가 문제가 있는듯?...
 */
 #include <iostream>
 #include <vector>
@@ -19,7 +19,7 @@ int get_minus_length(int a,int b);
 bool is_included(string& a,string& b);
 
 int N,s_size;
-int dp[1<<15];
+int dp[1<<15][15];
 int best_select[1<<15][15];
 int overlap_length[15][15];
 
@@ -39,7 +39,7 @@ int main(){
 }
 
 void Solve(){
-	memset(&dp[0],-1,sizeof(dp));
+	memset(&dp[0][0],-1,sizeof(dp));
 	memset(&best_select[0][0],-1,sizeof(best_select));
 	sub_string.clear();
 	input_list.clear();
@@ -66,9 +66,17 @@ void Solve(){
 
 	s_size = sub_string.size();
 
-	int ans = get_ans(0,0);
+	get_ans(0,0);
 
-	cout << ans << endl;
+	int now = 0;
+	int now_set = 0;
+	for(int i = 0 ; i < s_size ; i++){
+		int next = best_select[now_set][now];
+		cout << sub_string[next] << ' ';
+		now = next;
+		now_set = now_set | next;
+	}
+	cout << endl;
 	
 }
 
@@ -84,7 +92,7 @@ void Input(){
 
 //이번 인덱스 값 + get_ans - 다음 예정 인덱스와 겹치는 값
 int get_ans(int set,int idx){
-	int& ret = dp[set];
+	int& ret = dp[set][idx];
 	if(ret != -1)	return ret;
 
 	if(set == (1<<s_size)-1)	return sub_string[idx].size();
@@ -92,7 +100,8 @@ int get_ans(int set,int idx){
 	ret = INF;
 	if(set == 0){//가장 처음인 경우
 		for(int i = 0 ; i < s_size ; i++){
-			int temp = get_ans(set | (1<<i),i);
+			if(idx == i)	continue;
+			int temp = get_ans((set | (1<<i)),i);
 			if (temp < ret){
 				ret = temp;
 				best_select[set][idx] = i;
@@ -102,6 +111,7 @@ int get_ans(int set,int idx){
 	}
 
 	for(int i = 0 ; i < s_size ; i++){
+		if(idx == i)	continue;
 		if(set & (1<<i))	continue;
 		int next_set = set | (1<<i);
 		int temp = sub_string[idx].size() + get_ans(next_set,i) - get_minus_length(idx,i);
