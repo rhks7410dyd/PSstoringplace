@@ -108,11 +108,11 @@ void BFS(){
 		else if(map[i][0] >= 'A'){//대문자의 경우
 			if(!can_open(i,0)){
 				block_pos.push_back({i,0});
-				continue;
 			}
-
-			q.push({i,0});
-			visit[i][0] =true;
+			else{
+				q.push({i,0});
+				visit[i][0] =true;
+			}
 		}
 		else if(map[i][0]== '$'){
 			ans++;
@@ -133,10 +133,11 @@ void BFS(){
 			else if(map[i][w-1] >= 'A'){//대문자의 경우
 				if(!can_open(i,w-1)){
 					block_pos.push_back({i,w-1});
-					continue;
 				}			
-				q.push({i,w-1});
-				visit[i][w-1] =true;
+				else{
+					q.push({i,w-1});
+					visit[i][w-1] =true;
+				}
 			}
 			else if(map[i][w-1]== '$'){
 				ans++;
@@ -161,11 +162,11 @@ void BFS(){
 			else if(map[0][i] >= 'A'){//대문자의 경우
 				if(!can_open(0,i)){
 					block_pos.push_back({0,i});
-					continue;
 				}
-
-				q.push({0,i});
-				visit[0][i] =true;
+				else{
+					q.push({0,i});
+					visit[0][i] =true;
+				}
 			}
 			else if(map[0][i]== '$'){
 				ans++;
@@ -188,11 +189,11 @@ void BFS(){
 			else if(map[h-1][i] >= 'A'){//대문자의 경우
 				if(!can_open(h-1,i)){
 					block_pos.push_back({h-1,i});
-					continue;
 				}
-				
-				q.push({h-1,i});
-				visit[h-1][i] =true;
+				else{
+					q.push({h-1,i});
+					visit[h-1][i] =true;
+				}
 			}
 			else if(map[h-1][i]== '$'){
 				ans++;
@@ -225,7 +226,6 @@ void BFS(){
 			else if(map[ny][nx] >= 'A'){//대문자의 경우
 				if(!can_open(ny,nx)){
 					block_pos.push_back({ny,nx});
-					continue;
 				}
 				else{
 					q.push({ny,nx});
