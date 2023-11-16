@@ -100,7 +100,7 @@ int get_ans(int set,int idx){
 	ret = INF;
 	if(set == 0){//가장 처음인 경우
 		for(int i = 0 ; i < s_size ; i++){
-			if(idx == i)	continue;
+			if(set & 1<<i)	continue;
 			int temp = get_ans((set | (1<<i)),i);
 			if (temp < ret){
 				ret = temp;
