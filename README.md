@@ -43,7 +43,6 @@ Topological_Sorting - boj1516
 ## 알고스팟
 ### DP
 ##### algospot_OCR <- 얘는 진짜 뭐하자는 건지 모르겠어서 나중에 풀기
-##### algospot_RESTORE
 ##### algospot_NUMBERGAME
 ##### algospot_GENIUS
 
