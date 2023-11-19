@@ -41,6 +41,7 @@ int main(){
 void Solve(){
 	memset(&dp[0][0],-1,sizeof(dp));
 	memset(&best_select[0][0],-1,sizeof(best_select));
+	memset(&overlap_length[0][0],-1,sizeof(overlap_length));
 	sub_string.clear();
 	input_list.clear();
 
@@ -65,19 +66,28 @@ void Solve(){
 	}
 
 	s_size = sub_string.size();
+	//여기까지는 문제 없음
 
-	get_ans(0,0);
+	int ans = get_ans(0,0);
 
-	int now = 0;
-	int now_set = 0;
+	//cout << ans << endl;
+
+	int now = best_select[0][0];
+	int now_set = 1<<now;
 	for(int i = 0 ; i < s_size ; i++){
+		if(now_set == (1<<s_size) - 1){
+			cout << sub_string[now] << endl;
+			break;
+		}
+
 		int next = best_select[now_set][now];
-		cout << sub_string[next] << ' ';
+		for(int j = 0 ; j < sub_string[now].size() - overlap_length[now][next] ; j++){
+			cout << sub_string[now][j];
+		}
+
 		now = next;
-		now_set = now_set | next;
+		now_set = now_set | 1<<next;
 	}
-	cout << endl;
-	
 }
 
 void Input(){
@@ -90,7 +100,6 @@ void Input(){
 	}
 }
 
-//이번 인덱스 값 + get_ans - 다음 예정 인덱스와 겹치는 값
 int get_ans(int set,int idx){
 	int& ret = dp[set][idx];
 	if(ret != -1)	return ret;
@@ -102,7 +111,7 @@ int get_ans(int set,int idx){
 		for(int i = 0 ; i < s_size ; i++){
 			if(set & 1<<i)	continue;
 			int temp = get_ans((set | (1<<i)),i);
-			if (temp < ret){
+			if(temp < ret){
 				ret = temp;
 				best_select[set][idx] = i;
 			}
@@ -111,10 +120,9 @@ int get_ans(int set,int idx){
 	}
 
 	for(int i = 0 ; i < s_size ; i++){
-		if(idx == i)	continue;
 		if(set & (1<<i))	continue;
 		int next_set = set | (1<<i);
-		int temp = sub_string[idx].size() + get_ans(next_set,i) - get_minus_length(idx,i);
+		int temp = sub_string[idx].size() + get_ans(next_set,i) - get_minus_length(idx,i); //마지막 함수가 일을 안함
 		if(temp < ret){
 			ret = temp;
 			best_select[set][idx] = i;
@@ -150,6 +158,30 @@ int get_minus_length(int a,int b){
 
 //최솟값을 찾는 과정을 생각해봐야됨.
 //하나의 집합에서 16가지 경우의 수 중에서 최적화 된 선택한 인덱스를 택할 것
+
+/*
+3
+3
+geo
+oji
+jing
+2
+world
+hello
+3
+abrac
+cadabra
+dabr
+geo oji jing 
+10
+geo geo geo 
+world hello 
+10
+world world 
+abrac cadabra 
+12
+abrac abrac 
+*/
 
 
 /*
