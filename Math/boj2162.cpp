@@ -1,3 +1,4 @@
+//테스트 케이스 다 틀려버림
 #include <iostream>
 #include <vector>
 #define endl '\n'
@@ -10,8 +11,11 @@ struct line{
     pair<int,int> dot2;
 };
 
-line info[3000];
-int Uni[3000];
+const int SIZE = 3000;
+
+line info[SIZE];
+int Uni[SIZE];
+int cnt[SIZE];
 int n;
 
 int CCW(pair<int,int>& a,pair<int,int>& b,pair<int,int>& c);
@@ -28,6 +32,7 @@ int main(){
     for(int i = 0 ; i < n ; i++){
         cin >> x1 >> y1 >> x2 >> y2;
         info[i] = {{x1,y1},{x2,y2}};
+        Uni[i] = i;
     }
 
     for(int i = 0 ; i < n ; i++){
@@ -36,12 +41,28 @@ int main(){
             int b2 = CCW(info[j].dot1,info[j].dot2,info[i].dot1)*CCW(info[j].dot1,info[j].dot2,info[i].dot2);
             if(b1 <= 0 && b2 <= 0){
                 if(b1 == 0 && b2 == 0){
-                    //
+                    if((info[i].dot1.first - info[j].dot1.first)*(info[i].dot2.first-info[j].dot2.first) < 0){
+                        continue;
+                    }
                 }
                 merge_root(i,j);
             }
         }
     }
+
+    int group_num = 0,largest_num = -1;
+    for(int i = 0 ; i < n ; i++){
+        cnt[get_root(i)]++;
+    }
+
+    for(int i = 0 ; i < n ; i++){
+        if(cnt[i] != 0){
+            group_num++;
+            largest_num = largest_num > cnt[i] ? largest_num : cnt[i];
+        }
+    }
+
+    cout << group_num << endl << largest_num << endl;
 
     return 0;
 }
