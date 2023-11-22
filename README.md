@@ -37,7 +37,6 @@ Floyd_warshall - boj20056
 Implementation - boj2836
 Implementation - boj17779
 Implementation - boj19236
-Math - boj2162
 Geometry - boj16937
 Topological_Sorting - boj1516
 
