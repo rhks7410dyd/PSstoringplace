@@ -8,15 +8,15 @@
 
 using namespace std;
 
-int n;
-int val[SIZE];
-int ans[SIZE];
-vector<int> v[SIZE];
-queue<pair<int,int>> q;
-
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
     ios_base::sync_with_stdio(false);
+
+    int n;
+    int val[SIZE];
+    int ans[SIZE];
+    int latest_time[SIZE];
+    vector<int> v[SIZE];
 
     //continue code. . .
     cin >> n;
@@ -32,12 +32,11 @@ int main(){
             cin >> t;
             if(t == -1)     break;
             v[t].push_back(i);
-            v[t][0]++;
+            v[i][0]++;
         }
     }
 
-    int ans = 0;
-
+    queue<pair<int,int>> q;
     for(int i = 1 ; i <= n ; i++){
         if(v[i][0] == 0)    q.push({i,0});
     }
@@ -46,7 +45,19 @@ int main(){
         auto now = q.front();
         q.pop();
         ans[now.first] = now.second + val[now.first];
-        ////////////////////////////
+        for(int i = 1 ; i < v[now.first].size() ; i++){
+            int next = v[now.first][i];
+            v[next][0]--;
+            latest_time[next] = latest_time[next] > ans[now.first] ? latest_time[next] : ans[now.first];
+            if(latest_time[next] == 0)  latest_time[next] = ans[now.first];
+            if(v[next][0] == 0){
+                q.push({next,latest_time[next]});
+            }
+        }
+    }
+
+    for(int i = 1 ; i <= n ; i++){
+        cout << ans[i] << endl;
     }
 
     return 0;
