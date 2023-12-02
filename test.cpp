@@ -1,30 +1,40 @@
 #include <iostream>
-#define endl '\n'
-#define INF 987654321
+#define MAX 1000000
 
 using namespace std;
 
 int main(){
-    cin.tie(NULL);	cout.tie(NULL);
-    ios_base::sync_with_stdio(false);
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+	bool dp[MAX+1];
+	for(int i = 2 ; i*i <= MAX ; i++){
+		if(dp[i])	continue;
+		for(int j = i*i ; j <= MAX ; j+=i){
+			dp[j]=true;
+		}
+	}
 
-    int h,m,s;
-    cin >> h >> m >> s;
-    int t;
-    cin >> t;
-    h += t/3600;
-    t %= 3600;
-    m += t/60;
-    t %= 60;
-    s += t;
+	int n,a;
+	bool ch;
+	while(true){
+		cin >> n;
+		if(!n)	break;
+		a=2;
+		ch=false;
+		while(a<=n/2){
+			if(!dp[a] && !dp[n-a]){
+				ch=true;
+				break;
+			}
+			a++;
+		}
+		if(ch){
+			cout << n << " = " << a << " + " << n-a << '\n';
+		}
+		else{
+			cout << "Goldbach's conjecture is wrong.\n";
+		}
+	}
 
-    m += s/60;
-    s %= 60;
-    h += m/60;
-    m %= 60;
-    h %= 24;
-
-    cout << h << ' ' << m << ' ' << s << endl;
-
-    return 0;
+	return 0;
 }
