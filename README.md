@@ -1,8 +1,3 @@
-# 오늘 할 일
-2. 어제 풀던 문제 마무리 // 내일 꼭 책 가져오기
-3. 백준 문제 풀기   //풀던 문제를 또다시 풀지 못했다...구현력이 너무 약하다는 생각이 항상 듬
-4. 일요일에 참가한 대회 복기
-
 # PSstoringplace
 깃허브 사용 단계
 
@@ -32,6 +27,7 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 Backtracking - boj9202 <- now
 Dynamic_Programming - boj4781
 Dynamic_Programming - boj2629
+Dynamic_Programming - boj11062
 Devide_and_Conquer - boj15824
 Devide_and_Conquer - boj12850
 Floyd_warshall - boj20056 
