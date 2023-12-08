@@ -27,7 +27,6 @@ git add Math/boj2407.cpp 와 같이 쓰면 이 파일만 add됨
 Backtracking - boj9202 <- now
 Dynamic_Programming - boj4781
 Dynamic_Programming - boj2629
-Dynamic_Programming - boj11062
 Devide_and_Conquer - boj15824
 Devide_and_Conquer - boj12850
 Floyd_warshall - boj20056 
@@ -39,7 +38,6 @@ Geometry - boj16937
 ## 알고스팟
 ### DP
 ##### algospot_OCR <- 얘는 진짜 뭐하자는 건지 모르겠어서 나중에 풀기
-##### algospot_NUMBERGAME
 ##### algospot_GENIUS
 
 ### GREEDY
