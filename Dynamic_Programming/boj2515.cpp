@@ -9,16 +9,25 @@ using namespace std;
 const int SIZE = 300001;
 
 vector<pair<int,int>> info;
-int n,s;
-int dp[SIZE];
+int n,S;
+long long dp[SIZE];
 
 void Solve();
 void Input();
-int get_val(int idx);
+int binary_search(int start,int num);
+long long get_val(int idx);
+
+void printvector(){
+    cout << "=======================\n";
+    for(int i = 0 ; i < info.size() ; i++){
+        cout << info[i].first << ' ' << info[i].second << endl;
+    }
+    cout << '\n';
+}
 
 int main(){
-    cin.tie(NULL);	cout.tie(NULL);
-    ios_base::sync_with_stdio(false);
+    //cin.tie(NULL);	cout.tie(NULL);
+    //ios_base::sync_with_stdio(false);
 
     Solve();
 
@@ -29,13 +38,15 @@ void Solve(){
     Input();
     memset(&dp[0],-1,sizeof(dp));
 
-    int ans = get_val(-1);
+    //printvector();
+
+    long long ans = get_val(-1);
 
     cout << ans << endl;
 }
 
 void Input(){
-    cin >> n >> s;
+    cin >> n >> S;
     int h,c;
     for(int i = 0 ; i < n ; i++){
         cin >> h >> c;
@@ -49,25 +60,46 @@ void Input(){
             int e = i+2;
             while(e < info.size() && info[i].first == info[e].first)  e++;
             for(int j = i ; j < e-1 ; j++){
-                info.erase(info.begin()+j);
+                info.erase(info.begin()+i);
             }
         }
     }
 }
 
-int get_val(int idx){
-    int& ret = dp[idx+1];
+int binary_search(int start,int num){
+    int s = start,e = info.size();
+    while(s < e){
+        int mid = (s+e)/2;
+        if(info[mid].first - num >= S){
+            if(info[mid-1].first - num < S){
+                return mid;
+            }
+
+            e = mid;
+        }
+        else{
+            s = mid+1;
+        }
+    }
+
+    return -1;
+}
+
+long long get_val(int idx){
+    long long& ret = dp[idx+1];
 
     if(ret != -1)   return ret;
 
     ret = 0;
-    int first_case = -1;
-    for(int i = idx + 1 ; i < n ; i++){
-        if(idx == -1 || info[i].first - info[idx].first >= s){
-            ret = max(ret,get_val(i)+info[i].second);
-            if(first_case == -1)    first_case = i;
-            if(first_case != -1 && info[i].first - info[first_case].first >= s) break;
-        }
+    int first_case = -1,next_point = idx + 1;
+    if(idx != -1)   next_point = binary_search(idx+1,info[idx].first);
+
+    if(next_point == -1)    return ret = 0;
+
+    for(int i = next_point ; i < info.size() ; i++){// + 1 이 아니라 다음번이 될 수 있는 애부터 찾는게 나을듯
+        ret = max(ret,get_val(i)+info[i].second);
+        if(first_case == -1)    first_case = i;
+        if(first_case != -1 && info[i].first - info[first_case].first >= S) break;
     }
 
     return ret;
