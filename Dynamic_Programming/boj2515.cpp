@@ -1,3 +1,6 @@
+/*
+스캐폴딩이 쉬운 문제이기 때문에 스캐폴딩으로 깊이 30까지로 무작위로 돌려보기
+*/
 #include <iostream>
 #include <vector>
 #include <algorithm>
@@ -9,8 +12,10 @@ using namespace std;
 const int SIZE = 300001;
 
 vector<pair<int,int>> info;
-int n,S;
+vector<pair<int,int>> input;
+int n,S,info_size;
 long long dp[SIZE];
+int next_point[SIZE];
 
 void Solve();
 void Input();
@@ -40,6 +45,12 @@ void Solve(){
 
     //printvector();
 
+    info_size = info.size();
+
+    for(int i = info_size-1 ; i >= 0 ; i--){
+        next_point[i+1] = binary_search(i+1,info[i].first);
+    }
+
     long long ans = get_val(-1);
 
     cout << ans << endl;
@@ -50,24 +61,26 @@ void Input(){
     int h,c;
     for(int i = 0 ; i < n ; i++){
         cin >> h >> c;
-        info.push_back({h,c});
+        input.push_back({h,c});
     }
-    sort(info.begin(),info.end());
+    sort(input.begin(),input.end());
 
-    for(int i = 0 ; i < info.size()-1 ; i++){
-        if(info.size() == 0)    break;
-        if(info[i].first == info[i+1].first){
-            int e = i+2;
-            while(e < info.size() && info[i].first == info[e].first)  e++;
-            for(int j = i ; j < e-1 ; j++){
-                info.erase(info.begin()+i);
-            }
+    /*
+    중복 없앴더니 34% -> 11% 정도로 채점이 막힘. 여기서 뭔가 문제가 있음
+    */
+    bool same_val[SIZE];
+    for(int i = 0 ; i < n-1 ; i++){
+        if(input[i].first == input[i+1].first){
+            same_val[i] = true;
         }
+    }
+    for(int i = 0 ; i < n ; i++){
+        if(!same_val[i])    info.push_back(input[i]);
     }
 }
 
 int binary_search(int start,int num){
-    int s = start,e = info.size();
+    int s = start,e = info_size;
     while(s < e){
         int mid = (s+e)/2;
         if(info[mid].first - num >= S){
@@ -91,24 +104,45 @@ long long get_val(int idx){
     if(ret != -1)   return ret;
 
     ret = 0;
-    int first_case = -1,next_point = idx + 1;
-    if(idx != -1)   next_point = binary_search(idx+1,info[idx].first);
 
-    if(next_point == -1)    return ret = 0;
+    int last_idx = next_point[next_point[idx+1]+1];
+    if(last_idx == -1)  last_idx = info_size;
 
-    for(int i = next_point ; i < info.size() ; i++){// + 1 이 아니라 다음번이 될 수 있는 애부터 찾는게 나을듯
+    for(int i = next_point[idx+1] ; i < last_idx ; i++){// + 1 이 아니라 다음번이 될 수 있는 애부터 찾는게 나을듯
         ret = max(ret,get_val(i)+info[i].second);
-        if(first_case == -1)    first_case = i;
-        if(first_case != -1 && info[i].first - info[first_case].first >= S) break;
     }
 
     return ret;
 }
 
 /*
-문제에서 중요한 것은 얼마나 많은 그림이 세로가 s 이상이 되게 배치되는가? 즉, 완전 탐색으로 모든 경우를 찾아야한다. 그리고 휴리스틱을 사용해서 시간 절약
-
 안보이는 애는 선택 안한 걸로 생각하기
 dp[i+1] = i번째를 선택했을 때 최대 판매 비용
+
+6 4
+15 80
+8 230
+10 100
+17 200
+20 75
+26 80
+510
+
+8 230
+10 100
+15 80
+17 200
+20 75
+26 80
+
+510
+280
+280
+155
+80
+80
+0
+
+
 
 */
