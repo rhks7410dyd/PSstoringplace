@@ -47,6 +47,16 @@ Geometry - boj16937
 ### Combinational Search
 ##### Combinational_Search algospot_KAKURO2
 
+--------------------------------------------------
+
+# 휴가 계획
+- ### 12/26 ~ 12/30 : 정기 5일
+
+- ### 1/1~1/2 : 정기 2일
+
+- ### 1/7 ~ 1/12 : KCTC(3) + 상점(3)
+
+- ### 1/15 ~ 1/26 : 군단 집단(2) + 대민지원(2) + 화생방 유공(4) + 분대장(4)
 
 # Memo
 1. 토익 실전모의고사 문제집
@@ -97,7 +107,7 @@ O/S별
 
 소양적 필수 - Windows 서버의 기본적 작동에 필요한 지식, 보안
 
-#codeing_test_link
+# codeing_test_link
 1. 2022 카카오 신입 공채 1차 온라인 코딩테스트 - https://tech.kakao.com/2022/01/14/2022-kakao-recruitment-round-1/
 
 # 컴퓨터 견적
