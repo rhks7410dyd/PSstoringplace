@@ -9,6 +9,8 @@ using namespace std;
 const int SIZE = 100000;
 
 int n;
+int smallest_cache[SIZE];
+vector<int> cache[SIZE];
 vector<pair<int,int>> v;
 
 void Solve();
@@ -26,6 +28,15 @@ int main(){
 
 void Solve(){
     Input();
+
+    sort(v.begin(),v.end());
+
+    cache[0].push_back(v[0].second);
+    smallest_cache[0] = v[0].second;
+    for(int i = 1 ; i < n ; i++){
+        //continue code...
+    }
+
 }
 
 void Input(){
@@ -35,9 +46,15 @@ void Input(){
         cin a >> b;
         v.push_back({a,b});
     }
-
-    sort(v.begin(),v.end());
 }
+
+/*
+가장 긴 증가하는 부분 수열
+NlogN
+vector<int> dp[N];
+1. 이분 탐색으로 위치 찾기
+2. 
+*/
 
 
 /*
