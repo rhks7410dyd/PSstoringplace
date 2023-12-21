@@ -1,6 +1,5 @@
 /*
-스캐폴딩으로 깊이 100까지 해봤는데도 안잡힘 + 2%로 줄어듬..도대체 왜?
-그리고 도저히 왜 그런지 이해가 안감
+97%까지 떡상했는데 3퍼센트 부족인걸로 봐서는 예외 처리를 못한거로 생각됨
 */
 #include <iostream>
 #include <vector>
@@ -112,23 +111,19 @@ int main(){
     ios_base::sync_with_stdio(false);
 
     Solve();
-    /*
-    for(int i = 0 ; i < 1000000 ; i++){
-        if(!scapolding())   break;
-    }*/
 
     return 0;
 }
 
 void Solve(){
     Input();
-    memset(&dp[0],-1,sizeof(dp));
-
+    fill(&dp[0],&dp[SIZE],-1);
     //printvector();
-
+    
     info_size = info.size();
 
-    for(int i = info_size-1 ; i >= 0 ; i--){
+    next_point[0] = 0;
+    for(int i = 0 ; i < info_size ; i++){
         next_point[i+1] = binary_search(i+1,info[i].first); //i번째 인덱스 다음에 오면서 판매가 되는 그림이 시작하는 인덱스 번호
     }
 
@@ -144,16 +139,15 @@ void Input(){
         cin >> h >> c;
         input.push_back({h,c});
     }
+
     sort(input.begin(),input.end());
 
-    /*
-    중복 없앴더니 34% -> 11% 정도로 채점이 막힘. 여기서 뭔가 문제가 있음
-    */
     bool same_val[SIZE];
     for(int i = 0 ; i < n-1 ; i++){
         if(input[i].first == input[i+1].first){
             same_val[i] = true;
         }
+        else    same_val[i] = false;
     }
     for(int i = 0 ; i < n ; i++){
         if(!same_val[i])    info.push_back(input[i]);
@@ -186,17 +180,60 @@ long long get_val(int idx){
 
     ret = 0;
 
-    if(next_point[idx+1] == -1) return ret;
+    int next_idx = next_point[idx+1];//idx 뒤에 올 수 있는 가장 높이가 낮은 그림의 인덱스 번호
+    if(next_idx == -1) return ret;
 
-    int last_idx = next_point[next_point[idx+1]+1];
+    int last_idx = next_point[next_idx+1];
     if(last_idx == -1)  last_idx = info_size;
 
-    for(int i = next_point[idx+1] ; i < last_idx ; i++){// + 1 이 아니라 다음번이 될 수 있는 애부터 찾는게 나을듯
+    for(int i = next_idx ; i < last_idx ; i++){// + 1 이 아니라 다음번이 될 수 있는 애부터 찾는게 나을듯
         ret = max(ret,get_val(i)+info[i].second);
     }
 
     return ret;
 }
+
+/*
+#include<iostream>
+#include<vector>
+#include<string.h>
+#include<algorithm>
+using namespace std;
+
+int picture_num, selling_height;
+vector<int> dp, limit;
+vector<pair<int,int>> pictures;
+
+int main(){
+  ios_base::sync_with_stdio(0);
+  cin>>picture_num>>selling_height;
+
+  dp.resize(picture_num+1);
+  limit.resize(picture_num+1);
+  pictures = vector<pair<int,int>>(picture_num+1);
+
+  int height, cost;
+  pictures[0] = {0,0};
+  for(int i=1; i<=picture_num ; ++i){
+    cin>>height>>cost;
+    pictures[i] = {height, cost}; 
+  }
+
+  sort(pictures.begin(), pictures.end());
+
+  for(int idx=1; idx<=picture_num ; ++idx){
+    for(limit[idx] = limit[idx-1]; limit[idx] <idx ; ++limit[idx])
+      if(pictures[idx].first - pictures[limit[idx]].first < selling_height) break;
+    --limit[idx];
+  }
+
+  for(int idx=1; idx<=picture_num ; ++idx)
+    dp[idx] = max(dp[idx-1], dp[limit[idx]] + pictures[idx].second);
+
+  cout<<dp[picture_num]<<'\n';
+  return 0;
+}
+*/
 
 /*
 안보이는 애는 선택 안한 걸로 생각하기
@@ -225,7 +262,4 @@ dp[i+1] = i번째를 선택했을 때 최대 판매 비용
 80
 80
 0
-
-
-
 */
