@@ -25,87 +25,6 @@ void Input();
 int binary_search(int start,int num);
 long long get_val(int idx);
 
-long long brute(int idx){
-    if(idx == info_size)    return 0;
-
-    long long ret = brute(idx+1);
-    for(int i = idx+1 ; i < info_size ; i++){
-        if(idx != -1 && info[i].first - info[idx].first < S) continue;
-        ret = max(ret,brute(i)+info[idx].second);
-    }
-
-    return ret;
-}
-
-void sca_input(){
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<int> dis(1, 20000000);
-
-    n = dis(gen)%30 + 80;
-    S = dis(gen);
-    uniform_int_distribution<int> H_dis(S, 20000000);
-
-    for(int i = 0 ; i < n ; i++){
-        input.push_back({H_dis(gen),dis(gen)%1000+1});
-    }
-
-    sort(input.begin(),input.end());
-
-    bool same_val[SIZE];
-    for(int i = 0 ; i < n-1 ; i++){
-        if(input[i].first == input[i+1].first){
-            same_val[i] = true;
-        }
-    }
-    for(int i = 0 ; i < n ; i++){
-        if(!same_val[i])    info.push_back(input[i]);
-    }
-
-}
-
-int scapolding(){
-    time_t start_time,end_time;
-    double result_time;
-    start_time = time(NULL);
-
-    memset(&dp[0],-1,sizeof(dp));
-    info.clear();
-    input.clear();
-    sca_input();
-
-    info_size - info.size();
-
-    for(int i = info_size-1 ; i >= 0 ; i--){
-        next_point[i+1] = binary_search(i+1,info[i].first);
-    }
-
-    ans = get_val(-1);
-
-    end_time = time(NULL);
-
-    result_time = (double)(end_time - start_time);
-    if(result_time >= 2.0){
-        cout << "time out!\n";
-        return 0;
-    }   
-
-    long long sca_ans = brute(-1);
-    if(sca_ans != ans){
-        cout << "scapolding answer : " << sca_ans << "/tans : " << ans << endl;
-        return 0;
-    }
-    return 1;
-}
-
-void printvector(){
-    cout << "=======================\n";
-    for(int i = 0 ; i < info.size() ; i++){
-        cout << info[i].first << ' ' << info[i].second << endl;
-    }
-    cout << '\n';
-}
-
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
     ios_base::sync_with_stdio(false);
@@ -132,6 +51,29 @@ void Solve(){
     cout << ans << endl;
 }
 
+
+void Input(){
+    cin >> n >> S;
+    input.resize(n);
+    for(int i = 0 ; i < n ; i++){
+        cin >> input[i].first >> input[i].second;
+    }
+
+    sort(input.begin(), input.end());
+
+    // 중복된 높이 제거
+    auto it = unique(input.begin(), input.end(), [](const pair<int,int>& a, const pair<int,int>& b) {
+        return a.first == b.first;
+    });
+    input.resize(distance(input.begin(), it));
+
+    for(auto p : input) {
+        info.push_back(p);
+    }
+    info_size = info.size();
+}
+
+/*
 void Input(){
     cin >> n >> S;
     int h,c;
@@ -153,13 +95,14 @@ void Input(){
         if(!same_val[i])    info.push_back(input[i]);
     }
 }
+*/
 
 int binary_search(int start,int num){
     int s = start,e = info_size;
     while(s < e){
         int mid = (s+e)/2;
         if(info[mid].first - num >= S){
-            if(info[mid-1].first - num < S){
+            if(start == mid || info[mid-1].first - num < S){
                 return mid;
             }
 
