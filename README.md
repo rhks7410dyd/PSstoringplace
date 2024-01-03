@@ -167,4 +167,8 @@ SHANLING UA3 - c to 8pin 필요
 ### 세부 전공 관련 GPT에 질문한 내용
 https://chat.openai.com/share/ec917a85-f49d-4915-b123-82408800ad5d
 
-test
+### DBA 입장에서 바라보는 데이터베이스 직군 이야기
+https://rastalion.me/dba-%EC%9E%85%EC%9E%A5%EC%97%90%EC%84%9C-%EB%B0%94%EB%9D%BC%EB%B3%B4%EB%8A%94-%EB%8D%B0%EC%9D%B4%ED%84%B0%EB%B2%A0%EC%9D%B4%EC%8A%A4-%EC%A7%81%EA%B5%B0-%EC%9D%B4%EC%95%BC%EA%B8%B0/
+
+### 데이터베이스 관리자가 되기 위해 꼭 알아야 할 6가지 : 연봉/역량/자격증/준비과정
+https://www.jobindexworld.com/contents/view/7917
