@@ -166,3 +166,5 @@ SHANLING UA3 - c to 8pin 필요
 
 ### 세부 전공 관련 GPT에 질문한 내용
 https://chat.openai.com/share/ec917a85-f49d-4915-b123-82408800ad5d
+
+test
