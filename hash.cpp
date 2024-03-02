@@ -5,15 +5,24 @@
 using namespace std;
 
 int main(){
-    cin.tie(NULL);
-    cout.tie(NULL);
-    ios_base::sync_with_stdio(false);
-    
     int n = 99;
 
-    for(int i = 0 ; i < n ; i++){
-        cout << i << ' ';
-    }
+    cout << n << endl;
+
+    cin >> n;
+
+    cout << n << endl;
+
+    double a = -0.0;
+    double b = 0.0;
+
+    if(a==b)    cout << 1 << endl;
+    else    cout << 0 << endl;
+
+    cout << endl;
+
+    if((long long)a == (long long)b)    cout << 1 << endl;
+    else    cout << 0 << endl;
 
     return 0;
 }

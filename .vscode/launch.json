@@ -1,13 +1,5 @@
 {
-    "version": "0.2.0",
     "configurations": [
-        {
-            "type": "java",
-            "name": "App",
-            "request": "launch",
-            "mainClass": "App",
-            "projectName": "PSstoringplace_bf46524e"
-        },
         {
             "name": "C/C++: g++.exe 활성 파일 빌드 및 디버그",
             "type": "cppdbg",
@@ -15,11 +7,11 @@
             "program": "${fileDirname}\\build\\${fileBasenameNoExtension}.exe",
             "args": [],
             "stopAtEntry": false,
-            "cwd": "C:\\MinGW\\bin",
+            "cwd": "${fileDirname}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",
+            "miDebuggerPath": "C:\\mingw64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "gdb에 자동 서식 지정 사용",
@@ -34,5 +26,6 @@
             ],
             "preLaunchTask": "C/C++: g++.exe 활성 파일 빌드"
         }
-    ]
+    ],
+    "version": "2.0.0"
 }
