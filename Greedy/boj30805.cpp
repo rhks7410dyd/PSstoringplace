@@ -60,5 +60,5 @@ void GetAns(){
 }
 
 int find_max_num(int idx,int lmt){
-    int Max = 1;
+    int Max = 1;`
 }
