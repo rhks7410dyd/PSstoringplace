@@ -29,9 +29,8 @@ void Solve(){
     sort(input.begin(),input.end());
 
     int cnt = 0;
-    for(int i = n-1 ; i > 1 ; i--){
+    for(int i = n-1 ; i >= 0 ; i--){
         //continue code...
-        if(input[0] + input[1] > input[i]) break;
 
         if(is_good(i))   cnt++;
     }
@@ -51,11 +50,15 @@ void Input(){
 }
 
 bool is_good(int idx){
-    int le = 0,ri = idx-1, temp;
+    int le = 0,ri = n-1, temp;
+    if(ri < 1)  ri = 1;
     while(le < ri){
         temp = input[le] + input[ri];
-        if(temp == input[idx]) return true;
-        else if(temp > input[idx])  ri--;
+        if(temp == input[idx] && (idx != ri && idx != le) ){
+            cout << idx << ':' << le << '&' << ri << ' ' << input[le] << " + " << input[ri]  << " = " << input[idx] << endl;
+            return true;
+        }
+        else if(temp >= input[idx] && idx != 0)  ri--;
         else    le++;
     }
     return false;
