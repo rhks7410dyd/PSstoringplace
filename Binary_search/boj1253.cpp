@@ -55,7 +55,7 @@ bool is_good(int idx){
     while(le < ri){
         temp = input[le] + input[ri];
         if(temp == input[idx] && (idx != ri && idx != le) ){
-            cout << idx << ':' << le << '&' << ri << ' ' << input[le] << " + " << input[ri]  << " = " << input[idx] << endl;
+            //cout << idx << ':' << le << '&' << ri << ' ' << input[le] << " + " << input[ri]  << " = " << input[idx] << endl;
             return true;
         }
         else if(temp >= input[idx] && idx != 0)  ri--;
