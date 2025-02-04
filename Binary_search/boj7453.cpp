@@ -13,7 +13,9 @@ vector<int> merging[2];
 void Solve();
 void Input();
 void sort_and_merging();
+void printvector();
 int get_ans();
+
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -28,6 +30,8 @@ void Solve(){
     Input();
 
     sort_and_merging();
+
+    //printvector();
 
     cout << get_ans() << endl;
 }
@@ -57,22 +61,52 @@ void Input(){
     }
 }
 
+void printvector(){
+    auto v = merging;
+    for(int i = 0 ; i < 2 ; i++){
+        for(int j = 0 ; j < v[i].size() ; j++){
+            cout << v[i][j] << ' ';
+        }
+    cout << '\n';
+    }
+}
+
 int get_ans(){
     /*
-    if 문을 통해서 이전 인덱스 값과 지금 값이 같다면 그걸 그대로 가져와주는 형태의 코드를 생각해봤는데,
-    이렇게 했을 때, 실행횟수가 n^2만큼 추가가 된다. 따라서 n^2+p*log(n)만큼 실행하게 됨. (p는 이분탐색 실행 횟수)
-    반면 무조건적으로 이분탐색을 돌린다면, n^2*log(n)이 되는건가?
+    문제에서 무작위 숫자로 해도 되는 형태로 입력이 주어지는 경우에 시간초과가 나는듯함.
+    예를 들어
+    -1 0 1 0
+    으로 n개 입력 받으면
+    n^4이 되버려서 문제가 생기는듯
+    이러면 결국 동일한 merging 값을 하나에 저장하고 이걸 카운트하는 형태가 되어야될듯
+    단순하게 생각하면 머징을 한 뒤에 필터링을 통해 압축하는 형태로 변경되어야됨.
+    맵을 사용한다면 간단하지만 맵을 사용했을 때 맵에 접근하는 경우에 시간이 너무 많이 소요되서 안좋을 수도 있을 듯
     */
     int ans = 0;
-    for(int i = 0 ; i < n ; i++){
+    for(int i = 0 ; i < n*n ; i++){
         //continue code...
+        int target_num = -merging[0][i];
         int left = 0, right = n*n, mid;
         while(left < right){
             mid = (left + right)/2;
-            if(merging[1][mid] < -merging[0][i]){
+            if(target_num > merging[1][mid]){
                 left = mid + 1;
-            }else{
+            }
+            else if(target_num < merging[1][mid]){
                 right = mid;
+            }
+            else{
+                ans++;
+                int temp = mid;
+                while(true){
+                    if(temp > 0 && target_num == merging[1][--temp]) ans++;
+                    else    break;
+                }
+                while(true){
+                    if(mid < n*n-1 && target_num == merging[1][++mid]) ans++;
+                    else    break;
+                }
+                break;
             }
         }
     }
