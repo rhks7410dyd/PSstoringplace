@@ -8,14 +8,13 @@ using namespace std;
 
 int n;
 vector<int> input[4];
-vector<int> merging[2];
+vector<pair<int,long long>> info[2];
 
 void Solve();
 void Input();
 void sort_and_merging();
 void printvector();
-int get_ans();
-
+long long get_ans();
 
 int main(){
     cin.tie(NULL);	cout.tie(NULL);
@@ -32,21 +31,52 @@ void Solve(){
     sort_and_merging();
 
     //printvector();
-
-    cout << get_ans() << endl;
+    long long ans = get_ans();
+    cout << ans << endl;
 }
 
 void sort_and_merging(){
+    vector<int> merging;
+
     for(int i = 0 ; i < n ; i++){
         for(int j = 0 ; j < n ; j++){
             //continue code...
-            merging[0].push_back(input[0][i] + input[1][j]);
-            merging[1].push_back(input[2][i] + input[3][j]);
+            merging.push_back(input[0][i] + input[1][j]);
         }
     }
 
-    sort(merging[0].begin(), merging[0].end());
-    sort(merging[1].begin(), merging[1].end());
+    sort(merging.begin(), merging.end());
+
+    int len = merging.size();
+
+    for(int i = 0 ; i < len ; ){
+        //continue code...
+        int cur_val = merging[i], count = 1;
+        while(cur_val == merging[++i] && i < len){
+            count++;
+        }
+        info[0].push_back({cur_val,count});
+    }
+
+    merging.erase(merging.begin(),merging.end());
+
+    for(int i = 0 ; i < n ; i++){
+        for(int j = 0 ; j < n ; j++){
+            //continue code...
+            merging.push_back(input[2][i] + input[3][j]);
+        }
+    }
+
+    sort(merging.begin(), merging.end());
+
+    for(int i = 0 ; i < len ; ){//n아님
+        //continue code...
+        int cur_val = merging[i], count = 1;
+        while(cur_val == merging[++i] && i < len){
+            count++;
+        }
+        info[1].push_back({cur_val,count});
+    }
 }
 
 void Input(){
@@ -62,16 +92,16 @@ void Input(){
 }
 
 void printvector(){
-    auto v = merging;
+    auto v = info;
     for(int i = 0 ; i < 2 ; i++){
         for(int j = 0 ; j < v[i].size() ; j++){
-            cout << v[i][j] << ' ';
+            cout << v[i][j].first << ' ' << v[i][j].second << endl;
         }
     cout << '\n';
     }
 }
 
-int get_ans(){
+long long get_ans(){
     /*
     문제에서 무작위 숫자로 해도 되는 형태로 입력이 주어지는 경우에 시간초과가 나는듯함.
     예를 들어
@@ -82,30 +112,26 @@ int get_ans(){
     단순하게 생각하면 머징을 한 뒤에 필터링을 통해 압축하는 형태로 변경되어야됨.
     맵을 사용한다면 간단하지만 맵을 사용했을 때 맵에 접근하는 경우에 시간이 너무 많이 소요되서 안좋을 수도 있을 듯
     */
-    int ans = 0;
-    for(int i = 0 ; i < n*n ; i++){
+
+    long long ans = 0;
+    int len_1 = info[0].size();
+    int len_2 = info[1].size();
+    
+    for(int i = 0 ; i < len_1 ; i++){
         //continue code...
-        int target_num = -merging[0][i];
-        int left = 0, right = n*n, mid;
+        int target_num = -info[0][i].first;
+        int left = 0, right = len_2, mid;
         while(left < right){
             mid = (left + right)/2;
-            if(target_num > merging[1][mid]){
+            if(target_num > info[1][mid].first){
                 left = mid + 1;
             }
-            else if(target_num < merging[1][mid]){
+            else if(target_num < info[1][mid].first){
                 right = mid;
             }
             else{
-                ans++;
-                int temp = mid;
-                while(true){
-                    if(temp > 0 && target_num == merging[1][--temp]) ans++;
-                    else    break;
-                }
-                while(true){
-                    if(mid < n*n-1 && target_num == merging[1][++mid]) ans++;
-                    else    break;
-                }
+                ans += info[0][i].second * info[1][mid].second;
+                //cout << "correct!\t" << target_num << ':' << i << ' ' << mid << ' ' << info[0][i].second << ' ' << info[1][mid].second << endl;
                 break;
             }
         }
