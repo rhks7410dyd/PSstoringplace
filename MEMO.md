@@ -7,6 +7,9 @@
 6. 에듀플렉스 분당 정자점 22.3 ~ 22.6 말까지
 7. 최동혁 재수 컨설팅 형식 과외 22.3 ~ 22.6 말까지
 
+28707 풀기 전에 해시 맵을 좀 더 잘 사용할 줄 알아야 될 필요성을 느껴서 관련 문제로 실버 3개, 골드2 아래로 5개 정도 풀어보기.
+
+
 
 https://www.work.go.kr/empInfo/empInfoSrch/detail/retrivePriEmpDtlView.do?searchInfoType=CJK&iorgGbcd=CJK&callPage=detail&wantedAuthNo=45871786&rtnTarget=list9&pageIndex=3&rtnUrl=/empInfo/empInfoSrch/list/dtlEmpSrchList.do?len=0&srcKeyword=%EC%88%98%ED%95%99&regionArr=[Ljava.lang.String;@f071d209&pageSize=10&firstIndex=1&lastIndex=1&recordCountPerPage=10&academicGbnoEdu=noEdu&region=11000|41110|41111|41113|41115|41117|41131|41133|41135&siteClcd=all&benefitSrchAndOr=O&areaRegion=11000&areaArc=1&staAreaLineInfo1=11000&staAreaLineInfo2=1&codeDepth1Info=11000&codeDepth2Info=11000&listCookieInfo=DTL&srchJobNum=0&resultCntInfo=10&sortOrderByInfo=DESC&sortFieldInfo=DATE&empTpGbcd=1&sortField=DATE&sortOrderBy=DESC&resultCnt=10&keyword=%EC%88%98%ED%95%99&enterPriseGbn=all&termSearchGbn=all&&onlyTitleSrchYn=N&cloTermSearchGbn=all&keywordWantedTitle=N&keywordBusiNm=N&keywordJobCont=N&keywordStaAreaNm=N
 
