@@ -1,4 +1,10 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <map>
+#include <queue>
+#include <algorithm>
+#include <utility>
+#define INF 987654321
 
 using namespace std;
 
@@ -20,20 +26,41 @@ int main(){
     }
 
     
+    Map[ans] = INF;
+    if(Map[input] == INF){
+        cout << 0 << endl;
+        return 0;
+    }
     Map[input] = 0;
     queue<pair<vector<int>,int>> q;
     q.push({input,0});
 
+    int tmp;
     while(!q.empty()){
         auto now = q.front();
         q.pop();
-        if(Map.find(now.first) != Map.end()){
-            break;
-        }
+
         for(int i = 0 ; i <= n-k ; i++){
-            //continue code...
+            auto temparr = now.first;
+            for(int j = 0 ; j < k/2 ; j++){
+                tmp = temparr[i+j];
+                temparr[i+j] = temparr[i+k-j-1];
+                temparr[i+k-j-1] = tmp;
+            }
+            if(Map.find(temparr) != Map.end()){
+                if(Map[temparr] == INF){
+                    cout << now.second+1 << endl;
+                    return 0;
+                }
+            }
+            else{
+                Map[temparr] = now.second+1;
+                q.push({temparr,now.second+1});
+            }
         }
+
     }
 
-
+    cout << -1 << endl;
+    return 0;
 }
