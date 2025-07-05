@@ -32,9 +32,9 @@ int main(){
             dice_combo[i] = dice[combo[idx]-'0'];
             dice_combo[i] += dice[combo[++idx]-'0'];
             idx += 2;
-            cout << dice_combo[i] << ' ';
+            //cout << dice_combo[i] << ' ';
         }
-        cout << endl;
+        //cout << endl;
 
         string triple = "012 013 024 034 125 135 245 345 ";
         idx = 0;
@@ -44,15 +44,16 @@ int main(){
             dice_triple[i] += dice[triple[++idx]-'0'];
             dice_triple[i] += dice[triple[++idx]-'0'];
             idx += 2;
-            cout << dice_triple[i] << ' ';
+            //cout << dice_triple[i] << ' ';
         }
-        cout << endl;
+        //cout << endl;
         
         sort(dice,dice+6);
         sort(dice_combo,dice_combo+12);
         sort(dice_triple,dice_triple+8);
+
         long long answer = (long long)(N-2)*(5*N-6)*dice[0];
-        answer += (8*N-4)*dice_combo[0];
+        answer += (8*N-12)*dice_combo[0];
         answer += 4*dice_triple[0];
         cout << answer << endl;
     }
